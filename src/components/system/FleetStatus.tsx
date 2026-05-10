@@ -20,28 +20,18 @@ const agents: AgentRow[] = [
 
 export function FleetStatus() {
   return (
-    <Panel tag="FLEET" title="智能体状态" collapsible state="live">
-      <div className="px-4 py-3 grid grid-cols-3 gap-3 border-b border-hairline">
-        <div className="flex flex-col">
-          <span className="font-mono text-2xs uppercase tracking-[0.08em] text-fg-3">
-            ACTIVE
-          </span>
-          <span className="font-mono text-lg text-fg-1 tnum mt-0.5">24</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-mono text-2xs uppercase tracking-[0.08em] text-fg-3">
-            UAV
-          </span>
-          <span className="font-mono text-lg text-fg-1 tnum mt-0.5">12</span>
-        </div>
-        <div className="flex flex-col">
-          <span className="font-mono text-2xs uppercase tracking-[0.08em] text-fg-3">
-            UGV
-          </span>
-          <span className="font-mono text-lg text-fg-1 tnum mt-0.5">12</span>
-        </div>
-      </div>
-      <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 max-h-40 overflow-auto">
+    <Panel
+      tag="FLEET"
+      title="智能体状态"
+      collapsible
+      state="live"
+      actions={
+        <span className="font-mono text-2xs text-fg-2 tnum">
+          24 <span className="text-fg-4">·</span> 12 UAV <span className="text-fg-4">·</span> 12 UGV
+        </span>
+      }
+    >
+      <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 overflow-auto">
         {agents.map((a) => (
           <li
             key={a.id}
