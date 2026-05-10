@@ -53,7 +53,7 @@ export function Telemetry() {
         <Bar label="CPU" value={sys.cpu} />
         <Bar label="GPU" value={sys.gpu} />
         <Bar label="MEM" value={sys.mem} tone="ok" />
-        <Bar label="NET" value={sys.net} tone="warn" />
+        <Bar label="NET" value={sys.net} />
       </div>
     </Panel>
   );
