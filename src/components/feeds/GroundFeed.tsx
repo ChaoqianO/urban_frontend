@@ -47,7 +47,6 @@ export function GroundFeed() {
     >
       <div className="relative flex-1 min-h-0">
         <VideoSurface variant="ground" label={ugv.id} defaultUrl={DEFAULT_URL} />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-canvas/95 to-transparent" />
       </div>
       <div className="grid grid-cols-4 gap-3 px-4 py-3 border-t border-hairline">
         <Stat label="SPD" value={ugv.speed.toFixed(1)} unit="km/h" size="sm" />

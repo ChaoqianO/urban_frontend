@@ -75,8 +75,8 @@ export function CityBirdView() {
         <Compass size={20} weight="duotone" className="text-fg-2" />
       </div>
 
-      {/* bottom data strip */}
-      <div className="absolute inset-x-0 bottom-0 px-6 py-3 bg-gradient-to-t from-canvas via-canvas/90 to-transparent flex items-center gap-8 font-mono">
+      {/* bottom data strip — clean glass band, no gradient bleed */}
+      <div className="absolute inset-x-0 bottom-0 px-6 py-3 glass border-t border-hairline flex items-center gap-8 font-mono">
         <div className="flex items-baseline gap-2">
           <span className="text-2xs uppercase text-fg-3 tracking-[0.08em]">Vehicles</span>
           <span className="text-base text-fg-1 tnum">
