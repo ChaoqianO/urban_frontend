@@ -1,0 +1,84 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # ─── Static asset caching ───────────────────────────────
+    # Vite emits hashed filenames in /assets, so we can cache them aggressively.
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    location ~* \.(js|css|woff2?|ttf|otf|eot|svg|png|jpg|jpeg|gif|webp|ico)$ {
+        expires 7d;
+        add_header Cache-Control "public, max-age=604800";
+        try_files $uri =404;
+    }
+
+    # ─── HTML — never cache ─────────────────────────────────
+    location = /index.html {
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+        try_files $uri =404;
+    }
+
+    # ─── Backend proxies ────────────────────────────────────
+    # The CARLA Python bridge is reachable at $BACKEND_HOST.
+    # Set via `docker run -e BACKEND_HOST=...`.
+
+    location /api/ {
+        proxy_pass http://${BACKEND_HOST};
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+    }
+
+    # MJPEG: long-lived multipart stream — disable buffering.
+    location /video_feed {
+        proxy_pass http://${BACKEND_HOST};
+        proxy_set_header Host $host;
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+    }
+
+    # WebRTC signaling (one-shot POST).
+    location /webrtc/ {
+        proxy_pass http://${BACKEND_HOST};
+        proxy_set_header Host $host;
+        proxy_read_timeout 30s;
+    }
+
+    # Socket.IO with WebSocket upgrade.
+    location /socket.io/ {
+        proxy_pass http://${BACKEND_HOST};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade           $http_upgrade;
+        proxy_set_header Connection        "upgrade";
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_buffering off;
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+    }
+
+    # ─── SPA fallback ───────────────────────────────────────
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # ─── Health probe ───────────────────────────────────────
+    location = /healthz {
+        access_log off;
+        return 200 "ok\n";
+        add_header Content-Type text/plain;
+    }
+}
