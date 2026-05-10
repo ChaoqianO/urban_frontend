@@ -19,15 +19,7 @@ const agents: AgentRow[] = [
 
 export function FleetStatus() {
   return (
-    <Panel
-      tag="FLEET"
-      title="智能体状态"
-      collapsible
-      state="live"
-      actions={
-        <span className="font-mono text-2xs text-fg-2 tnum">4 / 2</span>
-      }
-    >
+    <Panel tag="FLEET" title="智能体状态" collapsible state="live">
       <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 overflow-auto">
         {agents.map((a) => (
           <li
