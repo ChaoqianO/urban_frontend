@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Polygon, ArrowsClockwise, Gear } from '@phosphor-icons/react';
-import { useMockStore } from '@/store/useMockStore';
+import { Polygon, ArrowsClockwise, Gear, Lightning } from '@phosphor-icons/react';
+import { useSystemStore } from '@/store/useSystemStore';
 import { StatusDot } from '@/components/primitives/StatusDot';
 import { NumberFlow } from '@/components/primitives/NumberFlow';
+import { Badge } from '@/components/primitives/Badge';
 
 function useNow() {
   const [now, setNow] = useState(new Date());
@@ -13,19 +14,20 @@ function useNow() {
   return now;
 }
 
-function fmtTime(d: Date) {
-  return d.toTimeString().slice(0, 8);
-}
-function fmtDate(d: Date) {
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(
+const fmtTime = (d: Date) => d.toTimeString().slice(0, 8);
+const fmtDate = (d: Date) =>
+  `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(
     d.getDate(),
   ).padStart(2, '0')}`;
-}
 
 export function Header() {
-  const connection = useMockStore((s) => s.connection);
-  const fps = useMockStore((s) => s.system.fps);
+  const connection = useSystemStore((s) => s.connection);
+  const source = useSystemStore((s) => s.source);
+  const fps = useSystemStore((s) => s.metrics.fps);
   const now = useNow();
+
+  const stateLabel =
+    connection === 'live' ? 'LIVE' : connection === 'reconnecting' ? 'CONNECTING' : 'OFFLINE';
 
   return (
     <header className="h-16 shrink-0 px-6 flex items-center justify-between border-b border-hairline">
@@ -45,8 +47,14 @@ export function Header() {
         <div className="flex items-center gap-2">
           <StatusDot state={connection} />
           <span className="font-mono text-2xs uppercase tracking-[0.08em] text-fg-2">
-            {connection === 'live' ? 'LIVE' : connection.toUpperCase()}
+            {stateLabel}
           </span>
+          {source === 'mock' && (
+            <Badge tone="warn" className="ml-1">
+              <Lightning size={9} weight="bold" className="mr-1" />
+              DEMO
+            </Badge>
+          )}
         </div>
         <div className="h-5 w-px bg-hairline" />
         <div className="flex items-center gap-3 font-mono tnum">
@@ -72,10 +80,16 @@ export function Header() {
         </div>
         <div className="h-5 w-px bg-hairline" />
         <div className="flex items-center gap-1">
-          <button className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140">
+          <button
+            className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140"
+            aria-label="重连"
+          >
             <ArrowsClockwise size={14} />
           </button>
-          <button className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140">
+          <button
+            className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140"
+            aria-label="设置"
+          >
             <Gear size={14} />
           </button>
         </div>

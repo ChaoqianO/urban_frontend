@@ -1,12 +1,14 @@
 import { Panel } from '@/components/primitives/Panel';
 import { Stat } from '@/components/primitives/Stat';
 import { Button } from '@/components/primitives/Button';
-import { useMockStore } from '@/store/useMockStore';
-import { PlaceholderScene } from './PlaceholderScene';
+import { useTelemetryStore } from '@/store/useTelemetryStore';
+import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
 
+const DEFAULT_URL = import.meta.env.VITE_UAV_FEED_URL ?? '';
+
 export function AerialFeed() {
-  const uav = useMockStore((s) => s.uav);
+  const uav = useTelemetryStore((s) => s.uav);
 
   return (
     <Panel
@@ -24,8 +26,8 @@ export function AerialFeed() {
       className="flex-1 min-h-0"
     >
       <div className="relative flex-1 min-h-0">
-        <PlaceholderScene variant="aerial" label={uav.id} />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-canvas/95 to-transparent" />
+        <VideoSurface variant="aerial" label={uav.id} defaultUrl={DEFAULT_URL} />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-canvas/95 to-transparent" />
       </div>
       <div className="grid grid-cols-4 gap-3 px-4 py-3 border-t border-hairline">
         <Stat label="ALT" value={uav.altitude.toFixed(1)} unit="m" size="sm" />

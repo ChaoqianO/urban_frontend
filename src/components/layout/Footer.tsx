@@ -1,8 +1,8 @@
-import { useMockStore } from '@/store/useMockStore';
+import { useSystemStore } from '@/store/useSystemStore';
 import { ArrowUp, ArrowDown, ShieldCheck } from '@phosphor-icons/react';
 
 export function Footer() {
-  const net = useMockStore((s) => s.system.net);
+  const net = useSystemStore((s) => s.metrics.net);
 
   return (
     <footer className="h-7 shrink-0 px-6 flex items-center justify-between border-t border-hairline text-2xs text-fg-3 font-mono uppercase tracking-[0.08em]">

@@ -1,7 +1,6 @@
 import { Panel } from '@/components/primitives/Panel';
 import { Badge } from '@/components/primitives/Badge';
 import { Drone, Truck } from '@phosphor-icons/react';
-import { useMockStore } from '@/store/useMockStore';
 import { cn } from '@/lib/cn';
 
 interface AgentRow {
@@ -21,8 +20,6 @@ const agents: AgentRow[] = [
 ];
 
 export function FleetStatus() {
-  const total = useMockStore((s) => s.city.vehicles);
-  void total;
   return (
     <Panel tag="FLEET" title="智能体状态" collapsible state="live">
       <div className="px-4 py-3 grid grid-cols-3 gap-3 border-b border-hairline">

@@ -2,8 +2,8 @@ import { Panel } from '@/components/primitives/Panel';
 import { Button } from '@/components/primitives/Button';
 import { Badge } from '@/components/primitives/Badge';
 import { NumberFlow } from '@/components/primitives/NumberFlow';
-import { useMockStore } from '@/store/useMockStore';
-import { PlaceholderScene } from './PlaceholderScene';
+import { useTelemetryStore } from '@/store/useTelemetryStore';
+import { VideoSurface } from './VideoSurface';
 import { CornersOut, Compass } from '@phosphor-icons/react';
 import { useState } from 'react';
 import { cn } from '@/lib/cn';
@@ -11,8 +11,10 @@ import { cn } from '@/lib/cn';
 const layers = ['Vehicles', 'Pedestrians', 'Signals', 'Heatmap'] as const;
 type Layer = (typeof layers)[number];
 
+const DEFAULT_URL = import.meta.env.VITE_CITY_FEED_URL ?? '';
+
 export function CityBirdView() {
-  const city = useMockStore((s) => s.city);
+  const city = useTelemetryStore((s) => s.city);
   const [active, setActive] = useState<Layer[]>(['Vehicles', 'Signals']);
 
   const toggle = (l: Layer) =>
@@ -37,11 +39,11 @@ export function CityBirdView() {
       bodyClassName="relative"
     >
       <div className="absolute inset-0">
-        <PlaceholderScene variant="city" />
+        <VideoSurface variant="city" defaultUrl={DEFAULT_URL} />
       </div>
 
       {/* layer chips */}
-      <div className="absolute top-4 right-4 flex gap-1">
+      <div className="absolute top-4 right-32 flex gap-1">
         {layers.map((l) => {
           const on = active.includes(l);
           return (

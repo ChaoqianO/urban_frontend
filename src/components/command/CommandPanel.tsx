@@ -1,7 +1,8 @@
 import { Panel } from '@/components/primitives/Panel';
 import { Button } from '@/components/primitives/Button';
 import { Input } from '@/components/primitives/Input';
-import { useMockStore } from '@/store/useMockStore';
+import { useCommandStore } from '@/store/useCommandStore';
+import { dispatchCommand } from '@/services/commandApi';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
 import { ArrowRight, Check, Warning, X, Terminal } from '@phosphor-icons/react';
@@ -45,11 +46,14 @@ function DirectionIcon({ direction }: { direction: CommandRecord['direction'] })
 }
 
 export function CommandPanel() {
-  const commands = useMockStore((s) => s.commands);
-  const push = useMockStore((s) => s.pushCommand);
+  const history = useCommandStore((s) => s.history);
+  const inputHistory = useCommandStore((s) => s.inputHistory);
+  const pushInputHistory = useCommandStore((s) => s.pushInputHistory);
+
   const [target, setTarget] = useState<(typeof targets)[number]>('ALL');
   const [priority, setPriority] = useState<Priority>('normal');
   const [text, setText] = useState('');
+  const [historyIdx, setHistoryIdx] = useState(-1);
   const [confirming, setConfirming] = useState<string | null>(null);
   const streamRef = useRef<HTMLDivElement>(null);
 
@@ -58,21 +62,34 @@ export function CommandPanel() {
       top: streamRef.current.scrollHeight,
       behavior: 'smooth',
     });
-  }, [commands.length]);
+  }, [history.length]);
 
   const send = (raw: string) => {
     const cmd = raw.trim();
     if (!cmd) return;
-    push({ direction: 'out', target, text: cmd });
+    dispatchCommand(cmd, target, priority);
+    pushInputHistory(cmd);
     setText('');
-    setTimeout(() => {
-      push({
-        direction: 'ack',
-        target: target === 'ALL' ? 'UAV-01' : target,
-        text: 'acknowledged',
-        latencyMs: 180 + Math.round(Math.random() * 120),
-      });
-    }, 600);
+    setHistoryIdx(-1);
+  };
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      send(text);
+      return;
+    }
+    if (e.key === 'ArrowUp' && inputHistory.length > 0) {
+      e.preventDefault();
+      const next = Math.min(historyIdx + 1, inputHistory.length - 1);
+      setHistoryIdx(next);
+      setText(inputHistory[next] ?? '');
+    }
+    if (e.key === 'ArrowDown' && historyIdx >= 0) {
+      e.preventDefault();
+      const next = historyIdx - 1;
+      setHistoryIdx(next);
+      setText(next < 0 ? '' : (inputHistory[next] ?? ''));
+    }
   };
 
   const handleDanger = (cmd: { label: string; cmd: string }) => {
@@ -94,7 +111,6 @@ export function CommandPanel() {
       bodyClassName="flex flex-col"
       className="flex-1 min-h-0"
     >
-      {/* Target & Priority */}
       <div className="px-4 py-3 flex items-center gap-2 border-b border-hairline">
         <select
           value={target}
@@ -120,7 +136,6 @@ export function CommandPanel() {
         </select>
       </div>
 
-      {/* Quick */}
       <div className="px-4 py-3 flex flex-wrap gap-1.5 border-b border-hairline">
         {quickCmds.map((q) => (
           <Button key={q.cmd} onClick={() => send(q.cmd)}>
@@ -139,13 +154,9 @@ export function CommandPanel() {
         ))}
       </div>
 
-      {/* Stream */}
-      <div
-        ref={streamRef}
-        className="flex-1 min-h-0 overflow-auto px-4 py-3 space-y-1.5"
-      >
+      <div ref={streamRef} className="flex-1 min-h-0 overflow-auto px-4 py-3 space-y-1.5">
         <AnimatePresence initial={false}>
-          {commands.map((c) => (
+          {history.map((c) => (
             <motion.div
               key={c.id}
               layout
@@ -183,15 +194,12 @@ export function CommandPanel() {
         </AnimatePresence>
       </div>
 
-      {/* Input */}
       <div className="px-4 py-3 border-t border-hairline flex gap-2">
         <Input
-          placeholder="输入指令,Enter 发送..."
+          placeholder="输入指令,Enter 发送,↑↓ 历史..."
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') send(text);
-          }}
+          onKeyDown={handleKey}
           className="font-mono"
         />
         <Button variant="primary" size="md" onClick={() => send(text)}>

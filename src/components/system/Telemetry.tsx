@@ -1,5 +1,5 @@
 import { Panel } from '@/components/primitives/Panel';
-import { useMockStore } from '@/store/useMockStore';
+import { useSystemStore } from '@/store/useSystemStore';
 import { NumberFlow } from '@/components/primitives/NumberFlow';
 import { cn } from '@/lib/cn';
 
@@ -65,7 +65,7 @@ function Sparkline({ data }: { data: number[] }) {
 }
 
 export function Telemetry() {
-  const sys = useMockStore((s) => s.system);
+  const sys = useSystemStore((s) => s.metrics);
   return (
     <Panel tag="SYS" title="系统遥测" collapsible state="live">
       <div className="px-4 py-3 flex flex-col gap-3">

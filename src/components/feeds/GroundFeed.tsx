@@ -1,9 +1,11 @@
 import { Panel } from '@/components/primitives/Panel';
 import { Stat } from '@/components/primitives/Stat';
 import { Button } from '@/components/primitives/Button';
-import { useMockStore } from '@/store/useMockStore';
-import { PlaceholderScene } from './PlaceholderScene';
+import { useTelemetryStore } from '@/store/useTelemetryStore';
+import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
+
+const DEFAULT_URL = import.meta.env.VITE_UGV_FEED_URL ?? '';
 
 const obstacleTone = {
   safe: 'ok',
@@ -18,7 +20,7 @@ const obstacleLabel = {
 } as const;
 
 export function GroundFeed() {
-  const ugv = useMockStore((s) => s.ugv);
+  const ugv = useTelemetryStore((s) => s.ugv);
 
   return (
     <Panel
@@ -36,8 +38,8 @@ export function GroundFeed() {
       className="flex-1 min-h-0"
     >
       <div className="relative flex-1 min-h-0">
-        <PlaceholderScene variant="ground" label={ugv.id} />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-canvas/95 to-transparent" />
+        <VideoSurface variant="ground" label={ugv.id} defaultUrl={DEFAULT_URL} />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-canvas/95 to-transparent" />
       </div>
       <div className="grid grid-cols-4 gap-3 px-4 py-3 border-t border-hairline">
         <Stat label="SPD" value={ugv.speed.toFixed(1)} unit="km/h" size="sm" />
