@@ -20,11 +20,11 @@ const agents: AgentRow[] = [
 export function FleetStatus() {
   return (
     <Panel tag="FLEET" title="智能体状态" collapsible state="live">
-      <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 overflow-auto">
+      <ul className="px-2 py-1 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto">
         {agents.map((a) => (
           <li
             key={a.id}
-            className="flex items-center gap-2 px-1.5 py-1.5 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer min-w-0"
+            className="flex items-center gap-2 px-1.5 py-1 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer min-w-0"
           >
             <div
               className={cn(

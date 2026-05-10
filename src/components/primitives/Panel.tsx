@@ -40,7 +40,6 @@ export function Panel({
   return (
     <motion.section
       id={id}
-      layout
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.36, ease: [0.32, 0.72, 0, 1] }}
@@ -56,7 +55,7 @@ export function Panel({
         !open && '!flex-none',
       )}
     >
-      <header className="flex items-center justify-between gap-3 px-4 h-11 shrink-0">
+      <header className="flex items-center justify-between gap-3 px-4 h-9 shrink-0">
         <div className="flex items-center gap-2.5 min-w-0">
           {tag && (
             <span className="font-mono text-2xs uppercase text-fg-3 tracking-[0.08em] tnum">
@@ -93,15 +92,9 @@ export function Panel({
       </header>
 
       {open && (
-        <motion.div
-          layout
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.24 }}
-          className={cn('flex-1 min-h-0 overflow-hidden', bodyClassName)}
-        >
+        <div className={cn('flex-1 min-h-0 overflow-hidden', bodyClassName)}>
           {children}
-        </motion.div>
+        </div>
       )}
     </motion.section>
   );

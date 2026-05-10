@@ -31,7 +31,7 @@ export function EventLog() {
         <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
       }
     >
-      <div className="px-4 py-1.5 h-20 overflow-auto space-y-0.5">
+      <div className="px-4 py-1 h-24 overflow-auto space-y-0.5">
         <AnimatePresence initial={false}>
           {events
             .slice()

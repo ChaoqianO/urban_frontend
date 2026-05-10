@@ -49,7 +49,7 @@ export function Telemetry() {
         </span>
       }
     >
-      <div className="px-4 py-2.5 grid grid-cols-2 gap-x-4 gap-y-2.5">
+      <div className="px-4 py-2 grid grid-cols-2 gap-x-4 gap-y-2">
         <Bar label="CPU" value={sys.cpu} />
         <Bar label="GPU" value={sys.gpu} />
         <Bar label="MEM" value={sys.mem} tone="ok" />
