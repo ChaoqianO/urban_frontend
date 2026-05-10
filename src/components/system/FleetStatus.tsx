@@ -16,6 +16,7 @@ const agents: AgentRow[] = [
   { id: 'UAV-03', kind: 'uav', state: 'reconnecting', battery: 41, signal: 0.32 },
   { id: 'UGV-01', kind: 'ugv', state: 'live', battery: 92, signal: 0.95 },
   { id: 'UGV-02', kind: 'ugv', state: 'live', battery: 73, signal: 0.88 },
+  { id: 'UGV-03', kind: 'ugv', state: 'live', battery: 56, signal: 0.79 },
 ];
 
 export function FleetStatus() {
@@ -26,9 +27,7 @@ export function FleetStatus() {
       collapsible
       state="live"
       actions={
-        <span className="font-mono text-2xs text-fg-2 tnum">
-          24 <span className="text-fg-4">·</span> 12 UAV <span className="text-fg-4">·</span> 12 UGV
-        </span>
+        <span className="font-mono text-2xs text-fg-2 tnum">24 / 12</span>
       }
     >
       <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 overflow-auto">

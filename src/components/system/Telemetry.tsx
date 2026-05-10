@@ -35,35 +35,6 @@ function Bar({ label, value, tone = 'accent' }: BarProps) {
   );
 }
 
-function Sparkline({ data }: { data: number[] }) {
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-  const w = 200;
-  const h = 20;
-  const step = w / (data.length - 1);
-  const path = data
-    .map((v, i) => {
-      const x = i * step;
-      const y = h - ((v - min) / range) * h;
-      return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
-    })
-    .join(' ');
-  const fill = `${path} L ${w} ${h} L 0 ${h} Z`;
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-5" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(142 122 92)" stopOpacity="0.32" />
-          <stop offset="100%" stopColor="rgb(142 122 92)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={fill} fill="url(#spark-grad)" />
-      <path d={path} fill="none" stroke="rgb(142 122 92)" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
 export function Telemetry() {
   const sys = useSystemStore((s) => s.metrics);
   return (
@@ -78,14 +49,11 @@ export function Telemetry() {
         </span>
       }
     >
-      <div className="px-4 py-2 grid grid-cols-2 gap-x-4 gap-y-2">
+      <div className="px-4 py-2.5 grid grid-cols-2 gap-x-4 gap-y-2.5">
         <Bar label="CPU" value={sys.cpu} />
         <Bar label="GPU" value={sys.gpu} />
         <Bar label="MEM" value={sys.mem} tone="ok" />
         <Bar label="NET" value={sys.net} tone="warn" />
-      </div>
-      <div className="px-4 pb-2 -mt-1">
-        <Sparkline data={sys.fpsHistory} />
       </div>
     </Panel>
   );
