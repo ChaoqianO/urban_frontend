@@ -113,7 +113,7 @@ export function CommandPanel() {
       bodyClassName="flex flex-col"
       className="flex-1 min-h-0"
     >
-      <div className="px-4 py-3 flex items-center gap-2 border-b border-hairline">
+      <div className="px-4 py-3 flex items-center gap-2 border-b border-hairline shrink-0">
         <select
           value={target}
           onChange={(e) => setTarget(e.target.value as typeof target)}
@@ -138,7 +138,7 @@ export function CommandPanel() {
         </select>
       </div>
 
-      <div className="border-b border-hairline">
+      <div className="border-b border-hairline shrink-0">
         <button
           type="button"
           onClick={() => setQuickOpen((v) => !v)}
@@ -215,7 +215,7 @@ export function CommandPanel() {
         </AnimatePresence>
       </div>
 
-      <div className="px-4 py-3 border-t border-hairline flex gap-2">
+      <div className="px-4 py-3 border-t border-hairline flex gap-2 shrink-0">
         <Input
           placeholder="输入指令,Enter 发送,↑↓ 历史..."
           value={text}

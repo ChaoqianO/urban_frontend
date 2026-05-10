@@ -87,7 +87,7 @@ export default function App() {
 
           <section
             className="grid gap-2 min-h-0 overflow-hidden"
-            style={{ gridTemplateRows: 'auto auto auto minmax(260px, 1fr)' }}
+            style={{ gridTemplateRows: 'auto auto auto minmax(360px, 1fr)' }}
           >
             <FleetStatus />
             <Telemetry />
