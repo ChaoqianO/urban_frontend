@@ -51,8 +51,8 @@ export function CityBirdView() {
         <VideoSurface variant="city" defaultUrl={DEFAULT_URL} />
       </div>
 
-      {/* layer chips */}
-      <div className="absolute top-4 right-32 flex gap-1">
+      {/* layer chips — placed bottom-left near minimap, leaves top-right free for connect popover */}
+      <div className="absolute bottom-44 left-4 flex flex-wrap gap-1 max-w-[160px]">
         {layers.map((l) => {
           const on = active.includes(l);
           return (
@@ -92,9 +92,9 @@ export function CityBirdView() {
               </pattern>
             </defs>
             <rect width="160" height="160" fill="url(#mini-grid)" />
-            <circle cx="60" cy="80" r="3" fill="rgb(184 148 108)" />
-            <circle cx="60" cy="80" r="6" fill="rgb(184 148 108 / 0.18)" />
-            <circle cx="100" cy="100" r="3" fill="rgb(174 168 158)" />
+            <circle cx="60" cy="80" r="3" fill="rgb(176 144 108)" />
+            <circle cx="60" cy="80" r="6" fill="rgb(176 144 108 / 0.18)" />
+            <circle cx="100" cy="100" r="3" fill="rgb(178 172 162)" />
             <path
               d="M 60 80 Q 80 70 100 100"
               fill="none"

@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    /* ── Surface stack — Cold Slate (very faint cool undertone) ── */
-    --bg-canvas: 12 13 16;
-    --bg-surface-1: 18 20 24;
-    --bg-surface-2: 26 29 34;
-    --bg-surface-3: 36 40 46;
+    /* ── Surface stack — Warm dark slate, lighter & calmer ── */
+    --bg-canvas: 27 26 24;
+    --bg-surface-1: 35 34 32;
+    --bg-surface-2: 44 43 40;
+    --bg-surface-3: 56 54 49;
 
-    /* ── Foreground — Warm white over cool body ── */
-    --fg-1: 232 228 220;
-    --fg-2: 174 168 158;
-    --fg-3: 110 105 96;
-    --fg-4: 60 57 52;
+    /* ── Foreground — Warm white tuned for new bg ── */
+    --fg-1: 234 230 222;
+    --fg-2: 178 172 162;
+    --fg-3: 116 110 100;
+    --fg-4: 70 66 60;
 
-    /* ── Single accent — Low-saturation amber ── */
-    --accent: 184 148 108;
+    /* ── Single accent — Low-saturation amber, slightly muted ── */
+    --accent: 176 144 108;
 
-    /* ── Semantic states — All desaturated ── */
-    --state-ok: 110 140 118;
-    --state-warn: 181 137 90;
-    --state-danger: 165 94 94;
+    /* ── Semantic states — Further desaturated ── */
+    --state-ok: 122 144 124;
+    --state-warn: 178 140 96;
+    --state-danger: 162 102 96;
   }
 
   html,
@@ -125,7 +125,7 @@
 
   /* Glass surface — used sparingly */
   .glass {
-    background: rgb(18 20 24 / 0.72);
+    background: rgb(35 34 32 / 0.72);
     backdrop-filter: blur(24px) saturate(140%);
     -webkit-backdrop-filter: blur(24px) saturate(140%);
     border: 1px solid rgb(255 255 255 / 0.06);

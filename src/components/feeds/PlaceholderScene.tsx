@@ -16,9 +16,9 @@ export function PlaceholderScene({ variant = 'aerial', label, className }: Props
       >
         <defs>
           <linearGradient id={`grad-${variant}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgb(20 24 30)" />
-            <stop offset="60%" stopColor="rgb(12 13 16)" />
-            <stop offset="100%" stopColor="rgb(12 13 16)" />
+            <stop offset="0%" stopColor="rgb(40 38 35)" />
+            <stop offset="60%" stopColor="rgb(27 26 24)" />
+            <stop offset="100%" stopColor="rgb(27 26 24)" />
           </linearGradient>
           <pattern id={`grid-${variant}`} width="32" height="32" patternUnits="userSpaceOnUse">
             <path
@@ -58,7 +58,7 @@ export function PlaceholderScene({ variant = 'aerial', label, className }: Props
           x2="800"
           y1="225"
           y2="225"
-          stroke="rgb(184 148 108 / 0.14)"
+          stroke="rgb(176 144 108 / 0.14)"
           strokeWidth="1"
           strokeDasharray="2 6"
         >
