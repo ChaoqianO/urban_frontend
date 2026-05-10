@@ -6,7 +6,7 @@ import { Input } from '@/components/primitives/Input';
 import { Plug, X, Broadcast, FileVideo, Image as ImageIcon } from '@phosphor-icons/react';
 import { connectWebRTC, type WebRTCSession } from '@/services/webrtc';
 
-export type VideoMode = 'placeholder' | 'mjpeg' | 'webrtc' | 'local';
+export type VideoMode = 'placeholder' | 'mjpeg' | 'webrtc' | 'video' | 'local';
 
 interface Props {
   variant: 'aerial' | 'ground' | 'city';
@@ -14,13 +14,20 @@ interface Props {
   className?: string;
   /** Optional default URL (env-provided). */
   defaultUrl?: string;
-  /** Default protocol when defaultUrl is set. */
-  defaultMode?: 'mjpeg' | 'webrtc';
+  /** Default protocol when defaultUrl is set. Auto-detects video files by extension. */
+  defaultMode?: 'mjpeg' | 'webrtc' | 'video';
+}
+
+const VIDEO_FILE_EXT = /\.(mp4|webm|mov|m4v|ogv)(\?|$)/i;
+function autoMode(url: string, fallback: 'mjpeg' | 'webrtc' | 'video'): VideoMode {
+  if (VIDEO_FILE_EXT.test(url)) return 'video';
+  return fallback;
 }
 
 const protoOptions: { mode: VideoMode; label: string; icon: typeof Plug }[] = [
   { mode: 'mjpeg', label: 'MJPEG', icon: ImageIcon },
   { mode: 'webrtc', label: 'WEBRTC', icon: Broadcast },
+  { mode: 'video', label: 'VIDEO', icon: FileVideo },
   { mode: 'local', label: 'LOCAL', icon: FileVideo },
 ];
 
@@ -31,10 +38,12 @@ export function VideoSurface({
   defaultUrl,
   defaultMode = 'mjpeg',
 }: Props) {
-  const [mode, setMode] = useState<VideoMode>(defaultUrl ? defaultMode : 'placeholder');
+  const [mode, setMode] = useState<VideoMode>(
+    defaultUrl ? autoMode(defaultUrl, defaultMode) : 'placeholder',
+  );
   const [url, setUrl] = useState(defaultUrl ?? '');
   const [draftUrl, setDraftUrl] = useState('');
-  const [draftProto, setDraftProto] = useState<'mjpeg' | 'webrtc'>(defaultMode);
+  const [draftProto, setDraftProto] = useState<'mjpeg' | 'webrtc' | 'video'>(defaultMode);
   const [showInput, setShowInput] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -70,9 +79,9 @@ export function VideoSurface({
     };
   }, [mode, url]);
 
-  // Local video lifecycle
+  // Local / video URL lifecycle
   useEffect(() => {
-    if (mode !== 'local' || !url) return;
+    if ((mode !== 'local' && mode !== 'video') || !url) return;
     if (videoRef.current) {
       videoRef.current.srcObject = null;
       videoRef.current.src = url;
@@ -80,10 +89,11 @@ export function VideoSurface({
     }
   }, [mode, url]);
 
-  const apply = (next: string, proto: 'mjpeg' | 'webrtc') => {
+  const apply = (next: string, proto: 'mjpeg' | 'webrtc' | 'video') => {
     if (!next) return;
     setUrl(next);
-    setMode(proto);
+    // Auto-detect video files even if user chose mjpeg.
+    setMode(autoMode(next, proto));
     setShowInput(false);
     setError(null);
   };
@@ -115,14 +125,20 @@ export function VideoSurface({
         />
       )}
 
-      {(mode === 'webrtc' || mode === 'local') && (
+      {(mode === 'webrtc' || mode === 'local' || mode === 'video') && (
         <video
           ref={videoRef}
           autoPlay
           muted
-          loop={mode === 'local'}
+          loop={mode === 'local' || mode === 'video'}
           playsInline
           className="w-full h-full object-cover bg-black"
+          onError={() => {
+            if (mode !== 'webrtc') {
+              setError('Video unreachable');
+              setMode('placeholder');
+            }
+          }}
         />
       )}
 
@@ -152,9 +168,9 @@ export function VideoSurface({
               CONNECT
             </button>
           ) : (
-            <div className="flex flex-col gap-1.5 p-2 rounded-md glass w-[300px]">
+            <div className="flex flex-col gap-1.5 p-2 rounded-md glass w-[320px]">
               <div className="flex gap-1">
-                {(['mjpeg', 'webrtc'] as const).map((p) => (
+                {(['mjpeg', 'webrtc', 'video'] as const).map((p) => (
                   <button
                     key={p}
                     onClick={() => setDraftProto(p)}
@@ -174,7 +190,9 @@ export function VideoSurface({
                   placeholder={
                     draftProto === 'mjpeg'
                       ? '/video_feed?camera=...'
-                      : '/webrtc/offer'
+                      : draftProto === 'webrtc'
+                        ? '/webrtc/offer'
+                        : '/media/sample.mp4'
                   }
                   value={draftUrl}
                   onChange={(e) => setDraftUrl(e.target.value)}
