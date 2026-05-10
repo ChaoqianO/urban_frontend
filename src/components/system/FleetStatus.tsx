@@ -72,7 +72,10 @@ export function FleetStatus() {
                   />
                 )}
               </div>
-              <div className="mt-0.5 h-[3px] rounded-full bg-surface-3 overflow-hidden">
+              <div
+                className="mt-0.5 h-[3px] rounded-full bg-surface-3 overflow-hidden"
+                title={`battery ${a.battery.toFixed(0)}%`}
+              >
                 <div
                   className={cn(
                     'h-full transition-all duration-360 ease-spring',
@@ -82,9 +85,6 @@ export function FleetStatus() {
                 />
               </div>
             </div>
-            <span className="font-mono text-2xs text-fg-3 tnum shrink-0">
-              {a.battery.toFixed(0)}
-            </span>
           </li>
         ))}
       </ul>

@@ -5,7 +5,7 @@ import { useCommandStore } from '@/store/useCommandStore';
 import { dispatchCommand } from '@/services/commandApi';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/cn';
-import { ArrowRight, Check, Warning, X, Terminal } from '@phosphor-icons/react';
+import { ArrowRight, Check, Warning, X, Terminal, CaretDown } from '@phosphor-icons/react';
 import type { CommandRecord, Priority } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -55,6 +55,7 @@ export function CommandPanel() {
   const [text, setText] = useState('');
   const [historyIdx, setHistoryIdx] = useState(-1);
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [quickOpen, setQuickOpen] = useState(false);
   const streamRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -137,22 +138,41 @@ export function CommandPanel() {
         </select>
       </div>
 
-      <div className="px-4 py-3 flex flex-wrap gap-1.5 border-b border-hairline">
-        {quickCmds.map((q) => (
-          <Button key={q.cmd} onClick={() => send(q.cmd)}>
-            {q.label}
-          </Button>
-        ))}
-        {dangerCmds.map((q) => (
-          <Button
-            key={q.cmd}
-            variant="danger"
-            onClick={() => handleDanger(q)}
-            className={cn(confirming === q.cmd && 'animate-pulse')}
-          >
-            {confirming === q.cmd ? `确认 ${q.label}?` : q.label}
-          </Button>
-        ))}
+      <div className="border-b border-hairline">
+        <button
+          type="button"
+          onClick={() => setQuickOpen((v) => !v)}
+          className="w-full px-4 h-8 flex items-center justify-between text-fg-3 hover:text-fg-1 transition-colors duration-140"
+        >
+          <span className="font-mono text-2xs uppercase tracking-[0.08em]">Quick Actions</span>
+          <CaretDown
+            size={11}
+            weight="bold"
+            className={cn(
+              'transition-transform duration-240 ease-spring',
+              !quickOpen && '-rotate-90',
+            )}
+          />
+        </button>
+        {quickOpen && (
+          <div className="px-4 pb-3 pt-1 flex flex-wrap gap-1.5">
+            {quickCmds.map((q) => (
+              <Button key={q.cmd} onClick={() => send(q.cmd)}>
+                {q.label}
+              </Button>
+            ))}
+            {dangerCmds.map((q) => (
+              <Button
+                key={q.cmd}
+                variant="danger"
+                onClick={() => handleDanger(q)}
+                className={cn(confirming === q.cmd && 'animate-pulse')}
+              >
+                {confirming === q.cmd ? `确认 ${q.label}?` : q.label}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div ref={streamRef} className="flex-1 min-h-0 overflow-auto px-4 py-3 space-y-1.5">
