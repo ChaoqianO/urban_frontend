@@ -75,38 +75,6 @@ export function CityBirdView() {
         <Compass size={20} weight="duotone" className="text-fg-2" />
       </div>
 
-      {/* mini map */}
-      <div className="absolute left-4 bottom-16 w-40 h-40 glass rounded-md p-2">
-        <div className="w-full h-full relative bg-canvas/60 rounded-sm overflow-hidden">
-          <svg viewBox="0 0 160 160" className="w-full h-full">
-            <defs>
-              <pattern id="mini-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                <path
-                  d="M 20 0 L 0 0 0 20"
-                  fill="none"
-                  stroke="rgb(0 0 0 / 0.08)"
-                  strokeWidth="0.5"
-                />
-              </pattern>
-            </defs>
-            <rect width="160" height="160" fill="url(#mini-grid)" />
-            <circle cx="60" cy="80" r="3" fill="rgb(142 122 92)" />
-            <circle cx="60" cy="80" r="6" fill="rgb(142 122 92 / 0.20)" />
-            <circle cx="100" cy="100" r="3" fill="rgb(78 72 64)" />
-            <path
-              d="M 60 80 Q 80 70 100 100"
-              fill="none"
-              stroke="rgb(0 0 0 / 0.20)"
-              strokeWidth="0.8"
-              strokeDasharray="2 3"
-            />
-          </svg>
-          <span className="absolute top-1.5 left-1.5 font-mono text-2xs uppercase tracking-[0.08em] text-fg-3">
-            MINI
-          </span>
-        </div>
-      </div>
-
       {/* bottom data strip */}
       <div className="absolute inset-x-0 bottom-0 px-6 py-3 bg-gradient-to-t from-canvas via-canvas/90 to-transparent flex items-center gap-8 font-mono">
         <div className="flex items-baseline gap-2">
