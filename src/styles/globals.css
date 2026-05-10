@@ -4,25 +4,25 @@
 
 @layer base {
   :root {
-    /* ── Surface stack (4% lightness step) ── */
-    --bg-canvas: 7 9 12;
-    --bg-surface-1: 11 14 19;
-    --bg-surface-2: 17 21 28;
-    --bg-surface-3: 26 32 41;
+    /* ── Surface stack — Cold Slate (very faint cool undertone) ── */
+    --bg-canvas: 12 13 16;
+    --bg-surface-1: 18 20 24;
+    --bg-surface-2: 26 29 34;
+    --bg-surface-3: 36 40 46;
 
-    /* ── Foreground (4 levels by opacity intent) ── */
-    --fg-1: 244 246 248;
-    --fg-2: 184 194 204;
-    --fg-3: 107 119 133;
-    --fg-4: 58 67 80;
+    /* ── Foreground — Warm white over cool body ── */
+    --fg-1: 232 228 220;
+    --fg-2: 174 168 158;
+    --fg-3: 110 105 96;
+    --fg-4: 60 57 52;
 
-    /* ── Single accent ── */
-    --accent: 79 140 255;
+    /* ── Single accent — Low-saturation amber ── */
+    --accent: 184 148 108;
 
-    /* ── Semantic states ── */
-    --state-ok: 43 182 115;
-    --state-warn: 232 163 61;
-    --state-danger: 229 72 77;
+    /* ── Semantic states — All desaturated ── */
+    --state-ok: 110 140 118;
+    --state-warn: 181 137 90;
+    --state-danger: 165 94 94;
   }
 
   html,
@@ -86,17 +86,17 @@
 }
 
 @layer utilities {
-  /* Subtle grain texture for canvas — adds expensive feel */
+  /* Subtle grain texture — extremely understated, no colored glow */
   .bg-grain {
     background-image:
       radial-gradient(
         ellipse at top,
-        rgb(var(--accent) / 0.04) 0%,
-        transparent 55%
+        rgb(var(--accent) / 0.02) 0%,
+        transparent 60%
       ),
       radial-gradient(
         ellipse at bottom right,
-        rgb(255 255 255 / 0.02) 0%,
+        rgb(255 255 255 / 0.015) 0%,
         transparent 50%
       );
   }
@@ -125,9 +125,9 @@
 
   /* Glass surface — used sparingly */
   .glass {
-    background: rgb(11 14 19 / 0.72);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgb(255 255 255 / 0.08);
+    background: rgb(18 20 24 / 0.72);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.06);
   }
 }

@@ -7,8 +7,8 @@ interface Props {
 }
 
 const colorMap: Record<ConnectionState, string> = {
-  live: 'bg-ok shadow-[0_0_0_3px_rgb(43_182_115_/_0.18)]',
-  reconnecting: 'bg-warn shadow-[0_0_0_3px_rgb(232_163_61_/_0.18)] animate-breathe',
+  live: 'bg-ok shadow-[0_0_0_3px_rgb(110_140_118_/_0.20)]',
+  reconnecting: 'bg-warn shadow-[0_0_0_3px_rgb(181_137_90_/_0.20)] animate-breathe',
   offline: 'bg-fg-4',
 };
 

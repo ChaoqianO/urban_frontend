@@ -54,12 +54,12 @@ function Sparkline({ data }: { data: number[] }) {
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-9" preserveAspectRatio="none">
       <defs>
         <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(79 140 255)" stopOpacity="0.32" />
-          <stop offset="100%" stopColor="rgb(79 140 255)" stopOpacity="0" />
+          <stop offset="0%" stopColor="rgb(184 148 108)" stopOpacity="0.28" />
+          <stop offset="100%" stopColor="rgb(184 148 108)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={fill} fill="url(#spark-grad)" />
-      <path d={path} fill="none" stroke="rgb(79 140 255)" strokeWidth="1.2" />
+      <path d={path} fill="none" stroke="rgb(184 148 108)" strokeWidth="1.2" />
     </svg>
   );
 }
