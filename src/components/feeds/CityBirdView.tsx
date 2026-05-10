@@ -32,6 +32,26 @@ export function CityBirdView() {
       variant="feature"
       actions={
         <>
+          <div className="flex items-center gap-1 mr-2">
+            {layers.map((l) => {
+              const on = active.includes(l);
+              return (
+                <button
+                  key={l}
+                  onClick={() => toggle(l)}
+                  title={l}
+                  className={cn(
+                    'h-6 px-2 rounded font-mono text-2xs uppercase tracking-[0.08em] transition-all duration-140 ease-spring',
+                    on
+                      ? 'bg-accent/12 text-accent border border-accent/30'
+                      : 'text-fg-3 border border-transparent hover:text-fg-1 hover:bg-surface-2',
+                  )}
+                >
+                  {l}
+                </button>
+              );
+            })}
+          </div>
           <Badge tone="accent">UE4 PIXEL STREAM</Badge>
           <Button
             variant="ghost"
@@ -48,27 +68,6 @@ export function CityBirdView() {
     >
       <div className="absolute inset-0">
         <VideoSurface variant="city" defaultUrl={DEFAULT_URL} />
-      </div>
-
-      {/* layer chips — placed bottom-left near minimap, leaves top-right free for connect popover */}
-      <div className="absolute bottom-44 left-4 flex flex-wrap gap-1 max-w-[160px]">
-        {layers.map((l) => {
-          const on = active.includes(l);
-          return (
-            <button
-              key={l}
-              onClick={() => toggle(l)}
-              className={cn(
-                'h-6 px-2 rounded-full font-mono text-2xs uppercase tracking-[0.08em] transition-all duration-140 ease-spring',
-                on
-                  ? 'bg-accent/12 text-accent border border-accent/30'
-                  : 'bg-surface-2/60 text-fg-3 border border-hairline hover:text-fg-1',
-              )}
-            >
-              {l}
-            </button>
-          );
-        })}
       </div>
 
       {/* compass */}
