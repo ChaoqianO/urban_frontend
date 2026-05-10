@@ -4,21 +4,29 @@ import { Button } from '@/components/primitives/Button';
 import { useTelemetryStore } from '@/store/useTelemetryStore';
 import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
+import { useFullscreen } from '@/hooks/useFullscreen';
 
 const DEFAULT_URL = import.meta.env.VITE_UAV_FEED_URL ?? '';
 
 export function AerialFeed() {
   const uav = useTelemetryStore((s) => s.uav);
+  const { toggle } = useFullscreen();
 
   return (
     <Panel
+      id="panel-aerial"
       tag="AERIAL"
       title="无人机视角"
       subtitle={uav.id}
       state="live"
       collapsible
       actions={
-        <Button variant="ghost" size="sm" aria-label="全屏">
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="全屏"
+          onClick={() => toggle('panel-aerial')}
+        >
           <CornersOut size={12} />
         </Button>
       }

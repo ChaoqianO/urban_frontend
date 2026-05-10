@@ -6,6 +6,8 @@ import { StatusDot } from './StatusDot';
 import type { ConnectionState } from '@/types';
 
 interface PanelProps {
+  /** DOM id — required for fullscreen + keyboard shortcuts. */
+  id?: string;
   tag?: string;
   title: string;
   subtitle?: string;
@@ -20,6 +22,7 @@ interface PanelProps {
 }
 
 export function Panel({
+  id,
   tag,
   title,
   subtitle,
@@ -36,6 +39,7 @@ export function Panel({
 
   return (
     <motion.section
+      id={id}
       layout
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -45,6 +49,7 @@ export function Panel({
         'bg-surface-1 shadow-panel',
         'transition-shadow duration-240 ease-spring',
         'hover:shadow-panel-elevated',
+        'fullscreen:rounded-none fullscreen:shadow-none',
         variant === 'feature' && 'bg-surface-1/80',
         className,
       )}

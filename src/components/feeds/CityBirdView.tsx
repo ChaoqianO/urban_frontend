@@ -7,6 +7,7 @@ import { VideoSurface } from './VideoSurface';
 import { CornersOut, Compass } from '@phosphor-icons/react';
 import { useState } from 'react';
 import { cn } from '@/lib/cn';
+import { useFullscreen } from '@/hooks/useFullscreen';
 
 const layers = ['Vehicles', 'Pedestrians', 'Signals', 'Heatmap'] as const;
 type Layer = (typeof layers)[number];
@@ -16,12 +17,14 @@ const DEFAULT_URL = import.meta.env.VITE_CITY_FEED_URL ?? '';
 export function CityBirdView() {
   const city = useTelemetryStore((s) => s.city);
   const [active, setActive] = useState<Layer[]>(['Vehicles', 'Signals']);
+  const { toggle: toggleFs } = useFullscreen();
 
   const toggle = (l: Layer) =>
     setActive((s) => (s.includes(l) ? s.filter((x) => x !== l) : [...s, l]));
 
   return (
     <Panel
+      id="panel-city"
       tag="MAP-3D"
       title="3D 鸟瞰图"
       subtitle="城市数字孪生"
@@ -30,7 +33,12 @@ export function CityBirdView() {
       actions={
         <>
           <Badge tone="accent">UE4 PIXEL STREAM</Badge>
-          <Button variant="ghost" size="sm" aria-label="全屏">
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label="全屏"
+            onClick={() => toggleFs('panel-city')}
+          >
             <CornersOut size={12} />
           </Button>
         </>

@@ -104,6 +104,7 @@ export function CommandPanel() {
 
   return (
     <Panel
+      id="panel-command"
       tag="CMD"
       title="智能体指令"
       collapsible

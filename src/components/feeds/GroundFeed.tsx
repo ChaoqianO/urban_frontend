@@ -4,6 +4,7 @@ import { Button } from '@/components/primitives/Button';
 import { useTelemetryStore } from '@/store/useTelemetryStore';
 import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
+import { useFullscreen } from '@/hooks/useFullscreen';
 
 const DEFAULT_URL = import.meta.env.VITE_UGV_FEED_URL ?? '';
 
@@ -21,16 +22,23 @@ const obstacleLabel = {
 
 export function GroundFeed() {
   const ugv = useTelemetryStore((s) => s.ugv);
+  const { toggle } = useFullscreen();
 
   return (
     <Panel
+      id="panel-ground"
       tag="GROUND"
       title="无人车视角"
       subtitle={ugv.id}
       state="live"
       collapsible
       actions={
-        <Button variant="ghost" size="sm" aria-label="全屏">
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="全屏"
+          onClick={() => toggle('panel-ground')}
+        >
           <CornersOut size={12} />
         </Button>
       }

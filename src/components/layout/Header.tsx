@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Polygon, ArrowsClockwise, Gear, Lightning } from '@phosphor-icons/react';
+import { Polygon, ArrowsClockwise, Gear, Lightning, Keyboard } from '@phosphor-icons/react';
 import { useSystemStore } from '@/store/useSystemStore';
 import { StatusDot } from '@/components/primitives/StatusDot';
 import { NumberFlow } from '@/components/primitives/NumberFlow';
@@ -20,7 +20,11 @@ const fmtDate = (d: Date) =>
     d.getDate(),
   ).padStart(2, '0')}`;
 
-export function Header() {
+interface HeaderProps {
+  onShowShortcuts?: () => void;
+}
+
+export function Header({ onShowShortcuts }: HeaderProps = {}) {
   const connection = useSystemStore((s) => s.connection);
   const source = useSystemStore((s) => s.source);
   const fps = useSystemStore((s) => s.metrics.fps);
@@ -80,6 +84,14 @@ export function Header() {
         </div>
         <div className="h-5 w-px bg-hairline" />
         <div className="flex items-center gap-1">
+          <button
+            onClick={onShowShortcuts}
+            className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140"
+            aria-label="键盘快捷键"
+            title="? 快捷键"
+          >
+            <Keyboard size={14} />
+          </button>
           <button
             className="size-8 inline-flex items-center justify-center text-fg-3 hover:text-fg-1 hover:bg-surface-2 rounded transition-colors duration-140"
             aria-label="重连"
