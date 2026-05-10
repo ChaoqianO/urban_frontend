@@ -1,5 +1,4 @@
 import { Panel } from '@/components/primitives/Panel';
-import { Badge } from '@/components/primitives/Badge';
 import { Drone, Truck } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
 
@@ -42,34 +41,38 @@ export function FleetStatus() {
           <span className="font-mono text-lg text-fg-1 tnum mt-0.5">12</span>
         </div>
       </div>
-      <ul className="px-2 py-1 max-h-44 overflow-auto">
+      <ul className="px-2 py-2 grid grid-cols-2 gap-x-2 gap-y-1 max-h-40 overflow-auto">
         {agents.map((a) => (
           <li
             key={a.id}
-            className="flex items-center gap-3 px-2 py-2 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer"
+            className="flex items-center gap-2 px-1.5 py-1.5 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer min-w-0"
           >
             <div
               className={cn(
-                'flex items-center justify-center size-7 rounded',
+                'flex items-center justify-center size-6 rounded shrink-0',
                 a.kind === 'uav' ? 'bg-accent/10 text-accent' : 'bg-surface-3 text-fg-2',
               )}
             >
               {a.kind === 'uav' ? (
-                <Drone size={14} weight="duotone" />
+                <Drone size={12} weight="duotone" />
               ) : (
-                <Truck size={14} weight="duotone" />
+                <Truck size={12} weight="duotone" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-fg-1 tnum">{a.id}</span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono text-2xs text-fg-1 tnum truncate">{a.id}</span>
                 {a.state !== 'live' && (
-                  <Badge tone={a.state === 'reconnecting' ? 'warn' : 'danger'}>
-                    {a.state}
-                  </Badge>
+                  <span
+                    className={cn(
+                      'size-1 rounded-full shrink-0',
+                      a.state === 'reconnecting' ? 'bg-warn animate-breathe' : 'bg-danger',
+                    )}
+                    title={a.state}
+                  />
                 )}
               </div>
-              <div className="mt-1 h-1 rounded-full bg-surface-3 overflow-hidden">
+              <div className="mt-0.5 h-[3px] rounded-full bg-surface-3 overflow-hidden">
                 <div
                   className={cn(
                     'h-full transition-all duration-360 ease-spring',
@@ -79,8 +82,8 @@ export function FleetStatus() {
                 />
               </div>
             </div>
-            <span className="font-mono text-2xs text-fg-3 tnum">
-              {a.battery.toFixed(0)}%
+            <span className="font-mono text-2xs text-fg-3 tnum shrink-0">
+              {a.battery.toFixed(0)}
             </span>
           </li>
         ))}
