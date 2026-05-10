@@ -24,7 +24,7 @@ export default {
         ok: 'rgb(var(--state-ok) / <alpha-value>)',
         warn: 'rgb(var(--state-warn) / <alpha-value>)',
         danger: 'rgb(var(--state-danger) / <alpha-value>)',
-        hairline: 'rgb(255 255 255 / 0.06)',
+        hairline: 'rgb(0 0 0 / 0.08)',
       },
       fontFamily: {
         sans: [
@@ -69,10 +69,10 @@ export default {
       },
       boxShadow: {
         panel:
-          '0 0 0 1px rgb(255 255 255 / 0.04), inset 0 1px 0 0 rgb(255 255 255 / 0.04), 0 24px 48px -12px rgb(0 0 0 / 0.5)',
+          '0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -6px rgb(0 0 0 / 0.06)',
         'panel-elevated':
-          '0 0 0 1px rgb(255 255 255 / 0.06), inset 0 1px 0 0 rgb(255 255 255 / 0.06), 0 32px 64px -16px rgb(0 0 0 / 0.6)',
-        ring: '0 0 0 1px rgb(var(--accent) / 0.5), 0 0 0 4px rgb(var(--accent) / 0.12)',
+          '0 0 0 1px rgb(0 0 0 / 0.08), 0 2px 4px rgb(0 0 0 / 0.05), 0 16px 40px -8px rgb(0 0 0 / 0.10)',
+        ring: '0 0 0 1px rgb(var(--accent) / 0.55), 0 0 0 4px rgb(var(--accent) / 0.16)',
       },
       transitionTimingFunction: {
         spring: 'cubic-bezier(0.32, 0.72, 0, 1)',

@@ -85,19 +85,19 @@ export function CityBirdView() {
                 <path
                   d="M 20 0 L 0 0 0 20"
                   fill="none"
-                  stroke="rgb(255 255 255 / 0.06)"
+                  stroke="rgb(0 0 0 / 0.08)"
                   strokeWidth="0.5"
                 />
               </pattern>
             </defs>
             <rect width="160" height="160" fill="url(#mini-grid)" />
-            <circle cx="60" cy="80" r="3" fill="rgb(176 144 108)" />
-            <circle cx="60" cy="80" r="6" fill="rgb(176 144 108 / 0.18)" />
-            <circle cx="100" cy="100" r="3" fill="rgb(178 172 162)" />
+            <circle cx="60" cy="80" r="3" fill="rgb(142 122 92)" />
+            <circle cx="60" cy="80" r="6" fill="rgb(142 122 92 / 0.20)" />
+            <circle cx="100" cy="100" r="3" fill="rgb(78 72 64)" />
             <path
               d="M 60 80 Q 80 70 100 100"
               fill="none"
-              stroke="rgb(255 255 255 / 0.16)"
+              stroke="rgb(0 0 0 / 0.20)"
               strokeWidth="0.8"
               strokeDasharray="2 3"
             />

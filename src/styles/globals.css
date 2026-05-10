@@ -4,25 +4,28 @@
 
 @layer base {
   :root {
-    /* ── Surface stack — Warm dark slate, lighter & calmer ── */
-    --bg-canvas: 27 26 24;
-    --bg-surface-1: 35 34 32;
-    --bg-surface-2: 44 43 40;
-    --bg-surface-3: 56 54 49;
+    /* ── Surface stack — Architectural Light (warm off-white paper) ── */
+    --bg-canvas: 242 239 232;
+    --bg-surface-1: 248 245 238;
+    --bg-surface-2: 237 233 224;
+    --bg-surface-3: 226 221 210;
 
-    /* ── Foreground — Warm white tuned for new bg ── */
-    --fg-1: 234 230 222;
-    --fg-2: 178 172 162;
-    --fg-3: 116 110 100;
-    --fg-4: 70 66 60;
+    /* ── Foreground — Warm near-black over warm paper ── */
+    --fg-1: 28 26 22;
+    --fg-2: 78 72 64;
+    --fg-3: 130 122 110;
+    --fg-4: 178 168 152;
 
-    /* ── Single accent — Low-saturation amber, slightly muted ── */
-    --accent: 176 144 108;
+    /* ── Single accent — Low-saturation warm bronze ── */
+    --accent: 142 122 92;
 
-    /* ── Semantic states — Further desaturated ── */
-    --state-ok: 122 144 124;
-    --state-warn: 178 140 96;
-    --state-danger: 162 102 96;
+    /* ── Semantic states — All desaturated, tuned for light bg ── */
+    --state-ok: 96 122 88;
+    --state-warn: 168 130 70;
+    --state-danger: 168 92 76;
+
+    /* Mid-line on light bg ── used for hairlines, dividers */
+    --line: 0 0 0;
   }
 
   html,
@@ -64,11 +67,11 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgb(255 255 255 / 0.06);
+    background: rgb(0 0 0 / 0.10);
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(255 255 255 / 0.12);
+    background: rgb(0 0 0 / 0.20);
   }
 
   /* Selection */
@@ -86,17 +89,17 @@
 }
 
 @layer utilities {
-  /* Subtle grain texture — extremely understated, no colored glow */
+  /* Subtle paper grain — vignette pulled toward the center */
   .bg-grain {
     background-image:
       radial-gradient(
         ellipse at top,
-        rgb(var(--accent) / 0.02) 0%,
-        transparent 60%
+        rgb(var(--accent) / 0.04) 0%,
+        transparent 55%
       ),
       radial-gradient(
         ellipse at bottom right,
-        rgb(255 255 255 / 0.015) 0%,
+        rgb(0 0 0 / 0.02) 0%,
         transparent 50%
       );
   }
@@ -106,8 +109,8 @@
     background-image: linear-gradient(
       to right,
       transparent,
-      rgb(255 255 255 / 0.08) 16%,
-      rgb(255 255 255 / 0.08) 84%,
+      rgb(0 0 0 / 0.08) 16%,
+      rgb(0 0 0 / 0.08) 84%,
       transparent
     );
     height: 1px;
@@ -116,8 +119,8 @@
     background-image: linear-gradient(
       to bottom,
       transparent,
-      rgb(255 255 255 / 0.08) 16%,
-      rgb(255 255 255 / 0.08) 84%,
+      rgb(0 0 0 / 0.08) 16%,
+      rgb(0 0 0 / 0.08) 84%,
       transparent
     );
     width: 1px;
@@ -125,9 +128,9 @@
 
   /* Glass surface — used sparingly */
   .glass {
-    background: rgb(35 34 32 / 0.72);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border: 1px solid rgb(255 255 255 / 0.06);
+    background: rgb(248 245 238 / 0.78);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border: 1px solid rgb(0 0 0 / 0.06);
   }
 }

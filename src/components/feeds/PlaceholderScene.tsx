@@ -16,15 +16,15 @@ export function PlaceholderScene({ variant = 'aerial', label, className }: Props
       >
         <defs>
           <linearGradient id={`grad-${variant}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgb(40 38 35)" />
-            <stop offset="60%" stopColor="rgb(27 26 24)" />
-            <stop offset="100%" stopColor="rgb(27 26 24)" />
+            <stop offset="0%" stopColor="rgb(248 245 238)" />
+            <stop offset="60%" stopColor="rgb(242 239 232)" />
+            <stop offset="100%" stopColor="rgb(237 233 224)" />
           </linearGradient>
           <pattern id={`grid-${variant}`} width="32" height="32" patternUnits="userSpaceOnUse">
             <path
               d="M 32 0 L 0 0 0 32"
               fill="none"
-              stroke="rgb(255 255 255 / 0.04)"
+              stroke="rgb(0 0 0 / 0.06)"
               strokeWidth="1"
             />
           </pattern>
@@ -35,7 +35,7 @@ export function PlaceholderScene({ variant = 'aerial', label, className }: Props
         {/* Isometric city silhouette — hairline */}
         <g
           transform="translate(120 120)"
-          stroke="rgb(255 255 255 / 0.18)"
+          stroke="rgb(0 0 0 / 0.22)"
           strokeWidth="0.8"
           fill="none"
           strokeLinejoin="round"
@@ -58,7 +58,7 @@ export function PlaceholderScene({ variant = 'aerial', label, className }: Props
           x2="800"
           y1="225"
           y2="225"
-          stroke="rgb(176 144 108 / 0.14)"
+          stroke="rgb(142 122 92 / 0.30)"
           strokeWidth="1"
           strokeDasharray="2 6"
         >

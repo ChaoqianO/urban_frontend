@@ -132,7 +132,7 @@ export function VideoSurface({
           muted
           loop={mode === 'local' || mode === 'video'}
           playsInline
-          className="w-full h-full object-cover bg-black"
+          className="w-full h-full object-cover bg-surface-3"
           onError={() => {
             if (mode !== 'webrtc') {
               setError('Video unreachable');
