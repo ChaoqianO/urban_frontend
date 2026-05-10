@@ -52,6 +52,8 @@ export function Panel({
         'fullscreen:rounded-none fullscreen:shadow-none',
         variant === 'feature' && 'bg-surface-1/80',
         className,
+        // Collapsed panels should shrink to header-only, not eat remaining flex space
+        !open && '!flex-none',
       )}
     >
       <header className="flex items-center justify-between gap-3 px-4 h-11 shrink-0">
