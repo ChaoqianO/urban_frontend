@@ -56,6 +56,22 @@ server {
         proxy_read_timeout 30s;
     }
 
+    # Demo media — reverse-proxy to vjs.zencdn.net so the same-origin
+    # HTTP page can pull HTTPS sample videos without tripping the
+    # browser's mixed-content guard. Cached for 1h.
+    location /media/ {
+        resolver 223.5.5.5 1.1.1.1 valid=300s;
+        resolver_timeout 5s;
+        proxy_pass https://vjs.zencdn.net/v/;
+        proxy_set_header Host vjs.zencdn.net;
+        proxy_ssl_server_name on;
+        proxy_ssl_name vjs.zencdn.net;
+        proxy_set_header User-Agent "urban-frontend/0.1";
+        proxy_buffering on;
+        proxy_cache_valid 200 1h;
+        add_header X-Proxied-Source vjs.zencdn.net always;
+    }
+
     # Socket.IO with WebSocket upgrade.
     location /socket.io/ {
         proxy_pass http://${BACKEND_HOST};

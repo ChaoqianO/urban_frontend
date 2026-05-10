@@ -12,8 +12,7 @@ import { useFullscreen } from '@/hooks/useFullscreen';
 const layers = ['Vehicles', 'Pedestrians', 'Signals', 'Heatmap'] as const;
 type Layer = (typeof layers)[number];
 
-const DEFAULT_URL =
-  import.meta.env.VITE_CITY_FEED_URL ?? 'https://vjs.zencdn.net/v/oceans.mp4';
+const DEFAULT_URL = import.meta.env.VITE_CITY_FEED_URL ?? '/media/oceans.mp4';
 
 export function CityBirdView() {
   const city = useTelemetryStore((s) => s.city);

@@ -6,8 +6,7 @@ import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
 import { useFullscreen } from '@/hooks/useFullscreen';
 
-const DEFAULT_URL =
-  import.meta.env.VITE_UAV_FEED_URL ?? 'https://vjs.zencdn.net/v/oceans.mp4';
+const DEFAULT_URL = import.meta.env.VITE_UAV_FEED_URL ?? '/media/oceans.mp4';
 
 export function AerialFeed() {
   const uav = useTelemetryStore((s) => s.uav);
