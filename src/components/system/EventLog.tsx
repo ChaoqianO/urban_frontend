@@ -31,7 +31,13 @@ export function EventLog() {
         <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
       }
     >
-      <div className="px-4 py-1 h-24 overflow-auto space-y-0.5">
+      <div
+        className="px-4 py-1 h-24 overflow-auto space-y-0.5"
+        style={{
+          maskImage: 'linear-gradient(to bottom, black calc(100% - 18px), transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 18px), transparent)',
+        }}
+      >
         <AnimatePresence initial={false}>
           {events
             .slice()
