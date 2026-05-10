@@ -37,8 +37,10 @@ export function useFadeMask<T extends HTMLElement = HTMLDivElement>() {
         setEdges({ top: false, bottom: false });
         return;
       }
-      const atTop = el.scrollTop <= 1;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+      // Within FADE px of an edge counts as "at" that edge — that way the
+      // user never sees the last/first row get veiled by the gradient.
+      const atTop = el.scrollTop <= FADE;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - FADE;
       setEdges({ top: !atTop, bottom: !atBottom });
     };
 
