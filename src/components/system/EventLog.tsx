@@ -22,8 +22,16 @@ function fmt(ts: number) {
 export function EventLog() {
   const events = useSystemStore((s) => s.events);
   return (
-    <Panel tag="LOG" title="事件日志" collapsible state="live">
-      <div className="px-4 py-2 max-h-32 overflow-auto space-y-0.5">
+    <Panel
+      tag="LOG"
+      title="事件日志"
+      collapsible
+      state="live"
+      actions={
+        <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
+      }
+    >
+      <div className="px-4 py-1.5 h-20 overflow-auto space-y-0.5">
         <AnimatePresence initial={false}>
           {events
             .slice()
