@@ -1,6 +1,7 @@
 import { Panel } from '@/components/primitives/Panel';
 import { Drone, Truck } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
+import { useFadeMask } from '@/hooks/useFadeMask';
 
 interface AgentRow {
   id: string;
@@ -13,14 +14,23 @@ interface AgentRow {
 const agents: AgentRow[] = [
   { id: 'UAV-01', kind: 'uav', state: 'live', battery: 87, signal: 0.92 },
   { id: 'UAV-02', kind: 'uav', state: 'reconnecting', battery: 41, signal: 0.32 },
+  { id: 'UAV-03', kind: 'uav', state: 'live', battery: 64, signal: 0.81 },
+  { id: 'UAV-04', kind: 'uav', state: 'live', battery: 78, signal: 0.86 },
   { id: 'UGV-01', kind: 'ugv', state: 'live', battery: 92, signal: 0.95 },
   { id: 'UGV-02', kind: 'ugv', state: 'live', battery: 73, signal: 0.88 },
+  { id: 'UGV-03', kind: 'ugv', state: 'live', battery: 56, signal: 0.79 },
+  { id: 'UGV-04', kind: 'ugv', state: 'offline', battery: 18, signal: 0 },
 ];
 
 export function FleetStatus() {
+  const fade = useFadeMask<HTMLUListElement>();
   return (
     <Panel tag="FLEET" title="智能体状态" collapsible state="live">
-      <ul className="px-2 py-1 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto">
+      <ul
+        ref={fade.ref}
+        style={fade.style}
+        className="px-2 py-1 grid grid-cols-2 gap-x-2 gap-y-0.5 h-28 overflow-auto"
+      >
         {agents.map((a) => (
           <li
             key={a.id}

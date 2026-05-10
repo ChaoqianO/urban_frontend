@@ -2,6 +2,7 @@ import { useSystemStore } from '@/store/useSystemStore';
 import { Panel } from '@/components/primitives/Panel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
+import { useFadeMask } from '@/hooks/useFadeMask';
 import type { Severity } from '@/types';
 
 const tone: Record<Severity, string> = {
@@ -21,6 +22,7 @@ function fmt(ts: number) {
 
 export function EventLog() {
   const events = useSystemStore((s) => s.events);
+  const fade = useFadeMask<HTMLDivElement>();
   return (
     <Panel
       tag="LOG"
@@ -32,11 +34,9 @@ export function EventLog() {
       }
     >
       <div
+        ref={fade.ref}
         className="px-4 py-1 h-24 overflow-auto space-y-0.5"
-        style={{
-          maskImage: 'linear-gradient(to bottom, black calc(100% - 18px), transparent)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 18px), transparent)',
-        }}
+        style={fade.style}
       >
         <AnimatePresence initial={false}>
           {events

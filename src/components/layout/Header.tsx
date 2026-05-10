@@ -79,7 +79,7 @@ export function Header({ onShowShortcuts }: HeaderProps = {}) {
             <span className="font-mono text-2xs uppercase tracking-[0.08em] text-fg-3">
               AGENTS
             </span>
-            <span className="font-mono text-sm text-fg-1 tnum">4</span>
+            <span className="font-mono text-sm text-fg-1 tnum">8</span>
           </div>
         </div>
         <div className="h-5 w-px bg-hairline" />
