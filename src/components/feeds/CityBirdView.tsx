@@ -64,19 +64,18 @@ export function CityBirdView() {
         </>
       }
       className="flex-1 min-h-0"
-      bodyClassName="relative"
+      bodyClassName="flex flex-col"
     >
-      <div className="absolute inset-0">
+      <div className="relative flex-1 min-h-0">
         <VideoSurface variant="city" defaultUrl={DEFAULT_URL} />
+        {/* compass — only floats over the video itself */}
+        <div className="absolute top-4 left-4 size-10 glass rounded-full flex items-center justify-center">
+          <Compass size={20} weight="duotone" className="text-fg-2" />
+        </div>
       </div>
 
-      {/* compass */}
-      <div className="absolute top-4 left-4 size-10 glass rounded-full flex items-center justify-center">
-        <Compass size={20} weight="duotone" className="text-fg-2" />
-      </div>
-
-      {/* bottom data strip — clean glass band, no gradient bleed */}
-      <div className="absolute inset-x-0 bottom-0 px-6 py-3 glass border-t border-hairline flex items-center gap-8 font-mono">
+      {/* bottom data strip — sits in the panel chrome, matches panel bg */}
+      <div className="px-6 py-3 border-t border-hairline flex items-center gap-8 font-mono shrink-0">
         <div className="flex items-baseline gap-2">
           <span className="text-2xs uppercase text-fg-3 tracking-[0.08em]">Vehicles</span>
           <span className="text-base text-fg-1 tnum">
