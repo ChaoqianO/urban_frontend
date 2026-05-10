@@ -7,7 +7,6 @@ import { GroundFeed } from '@/components/feeds/GroundFeed';
 import { CityBirdView } from '@/components/feeds/CityBirdView';
 import { FleetStatus } from '@/components/system/FleetStatus';
 import { Telemetry } from '@/components/system/Telemetry';
-import { EventLog } from '@/components/system/EventLog';
 import { CommandPanel } from '@/components/command/CommandPanel';
 import { ErrorBoundary } from '@/components/system/ErrorBoundary';
 import { useBridge } from '@/hooks/useBridge';
@@ -88,7 +87,6 @@ export default function App() {
           <section className="flex flex-col gap-2 min-h-0">
             <FleetStatus />
             <Telemetry />
-            <EventLog />
             <CommandPanel />
           </section>
         </main>
