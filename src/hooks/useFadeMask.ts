@@ -6,6 +6,7 @@ interface Edges {
 }
 
 const FADE = 18; // px of fade band
+const EDGE_TOLERANCE = 4; // px slack when deciding "at edge"
 
 function maskFromEdges({ top, bottom }: Edges): string | undefined {
   if (!top && !bottom) return undefined;
@@ -37,10 +38,13 @@ export function useFadeMask<T extends HTMLElement = HTMLDivElement>() {
         setEdges({ top: false, bottom: false });
         return;
       }
-      // Within FADE px of an edge counts as "at" that edge — that way the
-      // user never sees the last/first row get veiled by the gradient.
-      const atTop = el.scrollTop <= FADE;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - FADE;
+      // Tight tolerance: fade only disappears when the user is genuinely
+      // at the edge (within 4px). Combined with deterministic row heights
+      // upstream, this means the last/first row is fully visible BEFORE
+      // the veil drops, never after.
+      const atTop = el.scrollTop <= EDGE_TOLERANCE;
+      const atBottom =
+        el.scrollTop + el.clientHeight >= el.scrollHeight - EDGE_TOLERANCE;
       setEdges({ top: !atTop, bottom: !atBottom });
     };
 

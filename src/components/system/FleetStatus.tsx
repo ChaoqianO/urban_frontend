@@ -28,13 +28,18 @@ export function FleetStatus() {
     <Panel tag="FLEET" title="智能体状态" collapsible state="live">
       <ul
         ref={fade.ref}
-        style={fade.style}
-        className="px-2 py-1 grid grid-cols-2 gap-x-2 gap-y-0.5 h-28 overflow-auto"
+        style={{
+          ...fade.style,
+          // 3 rows * 32px + 2 gaps * 2px + 4px top + 4px bottom = 108px
+          height: '108px',
+          gridAutoRows: '32px',
+        }}
+        className="px-2 pt-1 pb-1 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
       >
         {agents.map((a) => (
           <li
             key={a.id}
-            className="flex items-center gap-2 px-1.5 py-1 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer min-w-0"
+            className="flex items-center gap-2 px-1.5 rounded hover:bg-surface-2 transition-colors duration-140 cursor-pointer min-w-0 h-8"
           >
             <div
               className={cn(

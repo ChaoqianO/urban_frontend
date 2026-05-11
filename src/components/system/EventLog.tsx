@@ -35,8 +35,12 @@ export function EventLog() {
     >
       <div
         ref={fade.ref}
-        className="px-4 py-1 h-24 overflow-auto space-y-0.5"
-        style={fade.style}
+        className="px-4 py-1 overflow-auto"
+        style={{
+          ...fade.style,
+          // 4 rows * 22px + 8px padding = 96px
+          height: '96px',
+        }}
       >
         <AnimatePresence initial={false}>
           {events
@@ -49,7 +53,7 @@ export function EventLog() {
                 initial={{ opacity: 0, x: -4 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.24 }}
-                className="flex items-baseline gap-2"
+                className="flex items-baseline gap-2 h-[22px]"
               >
                 <span className="font-mono text-2xs text-fg-4 tnum w-[60px] shrink-0">
                   {fmt(e.timestamp)}
