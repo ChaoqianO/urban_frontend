@@ -72,7 +72,7 @@ export function EventLog() {
             ))}
         </AnimatePresence>
       </div>
-        <ScrollFade top={fade.top} bottom={fade.bottom} surface="surface-1" />
+        <ScrollFade top={fade.top} bottom={fade.bottom} />
       </div>
     </Panel>
   );
