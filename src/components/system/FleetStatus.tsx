@@ -26,22 +26,15 @@ const agents: AgentRow[] = [
 export function FleetStatus() {
   const fade = useFadeMask<HTMLUListElement>();
   return (
-    <Panel
-      tag="FLEET"
-      title="智能体状态"
-      collapsible
-      state="live"
-      className="flex-1 min-h-0"
-      bodyClassName="flex flex-col"
-    >
-      <div className="relative flex-1 min-h-0">
+    <Panel tag="FLEET" title="智能体状态" collapsible state="live">
+      <div className="relative">
         <ul
           ref={fade.ref}
           style={{
             gridAutoRows: '32px',
             overscrollBehavior: 'contain',
           }}
-          className="px-2 pt-1 pb-0 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto absolute inset-0"
+          className="px-2 pt-1 pb-1 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
         >
         {agents.map((a) => (
           <li

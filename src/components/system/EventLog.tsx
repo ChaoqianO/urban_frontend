@@ -30,17 +30,16 @@ export function EventLog() {
       title="事件日志"
       collapsible
       state="live"
-      className="flex-1 min-h-0"
-      bodyClassName="flex flex-col"
       actions={
         <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
       }
     >
-      <div className="relative flex-1 min-h-0">
+      <div className="relative">
       <div
         ref={fade.ref}
-        className="px-4 pt-1 pb-0 overflow-auto absolute inset-0"
+        className="px-4 pt-1 pb-1 overflow-auto"
         style={{
+          height: '110px',
           overscrollBehavior: 'contain',
         }}
       >
