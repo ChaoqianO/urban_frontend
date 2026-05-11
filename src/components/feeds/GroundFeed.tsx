@@ -6,7 +6,7 @@ import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
 import { useFullscreen } from '@/hooks/useFullscreen';
 
-const DEFAULT_URL = import.meta.env.VITE_UGV_FEED_URL ?? '/media/oceans.mp4';
+const DEFAULT_URL = import.meta.env.VITE_UGV_FEED_URL ?? '/media/ground.mp4';
 
 const obstacleTone = {
   safe: 'ok',
