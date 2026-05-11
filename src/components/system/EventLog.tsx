@@ -3,6 +3,7 @@ import { Panel } from '@/components/primitives/Panel';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/cn';
 import { useFadeMask } from '@/hooks/useFadeMask';
+import { ScrollFade } from '@/components/primitives/ScrollFade';
 import type { Severity } from '@/types';
 
 const tone: Record<Severity, string> = {
@@ -33,11 +34,11 @@ export function EventLog() {
         <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
       }
     >
+      <div className="relative">
       <div
         ref={fade.ref}
         className="px-4 pt-1 pb-0 overflow-auto"
         style={{
-          ...fade.style,
           // 4 rows * 22px + 4px top padding = 92px
           height: '92px',
         }}
@@ -70,6 +71,8 @@ export function EventLog() {
               </motion.div>
             ))}
         </AnimatePresence>
+      </div>
+        <ScrollFade top={fade.top} bottom={fade.bottom} surface="surface-1" />
       </div>
     </Panel>
   );

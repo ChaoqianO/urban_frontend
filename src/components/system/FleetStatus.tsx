@@ -2,6 +2,7 @@ import { Panel } from '@/components/primitives/Panel';
 import { Drone, Truck } from '@phosphor-icons/react';
 import { cn } from '@/lib/cn';
 import { useFadeMask } from '@/hooks/useFadeMask';
+import { ScrollFade } from '@/components/primitives/ScrollFade';
 
 interface AgentRow {
   id: string;
@@ -26,16 +27,16 @@ export function FleetStatus() {
   const fade = useFadeMask<HTMLUListElement>();
   return (
     <Panel tag="FLEET" title="智能体状态" collapsible state="live">
-      <ul
-        ref={fade.ref}
-        style={{
-          ...fade.style,
-          // 3 rows * 32px + 2 gaps * 2px + 4px top padding = 104px
-          height: '104px',
-          gridAutoRows: '32px',
-        }}
-        className="px-2 pt-1 pb-0 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
-      >
+      <div className="relative">
+        <ul
+          ref={fade.ref}
+          style={{
+            // 3 rows * 32px + 2 gaps * 2px + 4px top padding = 104px
+            height: '104px',
+            gridAutoRows: '32px',
+          }}
+          className="px-2 pt-1 pb-0 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
+        >
         {agents.map((a) => (
           <li
             key={a.id}
@@ -81,7 +82,9 @@ export function FleetStatus() {
             </div>
           </li>
         ))}
-      </ul>
+        </ul>
+        <ScrollFade top={fade.top} bottom={fade.bottom} surface="surface-1" />
+      </div>
     </Panel>
   );
 }
