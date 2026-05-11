@@ -85,10 +85,7 @@ export default function App() {
             <CityBirdView />
           </section>
 
-          <section
-            className="grid gap-2 min-h-0 overflow-y-auto"
-            style={{ gridTemplateRows: 'auto auto auto minmax(360px, 1fr)' }}
-          >
+          <section className="flex flex-col gap-2 min-h-0 overflow-y-auto">
             <FleetStatus />
             <Telemetry />
             <EventLog />
