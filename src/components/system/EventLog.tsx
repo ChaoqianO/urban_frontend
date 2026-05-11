@@ -35,11 +35,11 @@ export function EventLog() {
     >
       <div
         ref={fade.ref}
-        className="px-4 py-1 overflow-auto"
+        className="px-4 pt-1 pb-0 overflow-auto"
         style={{
           ...fade.style,
-          // 4 rows * 22px + 8px padding = 96px
-          height: '96px',
+          // 4 rows * 22px + 4px top padding = 92px
+          height: '92px',
         }}
       >
         <AnimatePresence initial={false}>

@@ -30,11 +30,11 @@ export function FleetStatus() {
         ref={fade.ref}
         style={{
           ...fade.style,
-          // 3 rows * 32px + 2 gaps * 2px + 4px top + 4px bottom = 108px
-          height: '108px',
+          // 3 rows * 32px + 2 gaps * 2px + 4px top padding = 104px
+          height: '104px',
           gridAutoRows: '32px',
         }}
-        className="px-2 pt-1 pb-1 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
+        className="px-2 pt-1 pb-0 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
       >
         {agents.map((a) => (
           <li
