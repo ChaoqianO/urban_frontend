@@ -34,6 +34,7 @@ export function FleetStatus() {
             // 3 rows * 32px + 2 gaps * 2px + 4px top padding = 104px
             height: '104px',
             gridAutoRows: '32px',
+            overscrollBehavior: 'contain',
           }}
           className="px-2 pt-1 pb-0 grid grid-cols-2 gap-x-2 gap-y-0.5 overflow-auto"
         >

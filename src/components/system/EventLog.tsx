@@ -41,6 +41,7 @@ export function EventLog() {
         style={{
           // 4 rows * 22px + 4px top padding = 92px
           height: '92px',
+          overscrollBehavior: 'contain',
         }}
       >
         <AnimatePresence initial={false}>
