@@ -19,8 +19,11 @@ interface Props {
 }
 
 const VIDEO_FILE_EXT = /\.(mp4|webm|mov|m4v|ogv)(\?|$)/i;
+/** Paths like /webrtc/aerial or webrtc://... use RTCPeerConnection, not <img>. */
+const WEBRTC_PATH = /(^|\/)webrtc(\/|$)/i;
 function autoMode(url: string, fallback: 'mjpeg' | 'webrtc' | 'video'): VideoMode {
   if (VIDEO_FILE_EXT.test(url)) return 'video';
+  if (url.toLowerCase().startsWith('webrtc://') || WEBRTC_PATH.test(url)) return 'webrtc';
   return fallback;
 }
 
