@@ -58,7 +58,7 @@ export async function triggerFire(
     sys.pushEvent({
       severity: 'ok',
       source: 'SCENARIO',
-      message: `点火 ${resp.incident_id} 已下发 · actor=${resp.spawned_actor_id ?? '?'}${
+      message: `点火 ${resp.incident_id} 已下发 ${
         resp.run_id != null ? ` · run=${resp.run_id}` : ''
       }`,
     });

@@ -26,7 +26,7 @@ const agents: AgentRow[] = [
 export function FleetStatus() {
   const fade = useFadeMask<HTMLUListElement>();
   return (
-    <Panel tag="FLEET" title="智能体状态" collapsible state="live">
+    <Panel tag="FLEET" title="智能体状态" collapsible state="live" className="shrink-0">
       <div className="relative">
         <ul
           ref={fade.ref}

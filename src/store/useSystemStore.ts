@@ -29,11 +29,11 @@ export const useSystemStore = create<SystemState>((set) => ({
   connection: 'offline',
   source: 'mock',
   metrics: {
-    cpu: 62,
-    gpu: 78,
-    mem: 55,
-    net: 38,
-    fps: 60,
+    cpu: 0,
+    gpu: 0,
+    mem: 0,
+    net: 0,
+    fps: 0,
     fpsHistory: seedFps,
   },
   events: [

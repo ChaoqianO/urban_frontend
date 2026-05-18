@@ -8,7 +8,7 @@ import { CityBirdView } from '@/components/feeds/CityBirdView';
 import { FleetStatus } from '@/components/system/FleetStatus';
 import { Telemetry } from '@/components/system/Telemetry';
 import { EventLog } from '@/components/system/EventLog';
-import { CommandPanel } from '@/components/command/CommandPanel';
+import { AgentInstructions } from '@/components/system/AgentInstructions';
 import { ErrorBoundary } from '@/components/system/ErrorBoundary';
 import { useBridge } from '@/hooks/useBridge';
 import { useFullscreen } from '@/hooks/useFullscreen';
@@ -85,11 +85,11 @@ export default function App() {
             <CityBirdView />
           </section>
 
-          <section className="flex flex-col gap-2 min-h-0 overflow-y-auto">
+          <section className="flex flex-col gap-2 min-h-0">
             <FleetStatus />
             <Telemetry />
+            <AgentInstructions />
             <EventLog />
-            <CommandPanel />
           </section>
         </main>
         <Footer />

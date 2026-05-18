@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(Get-ChildItem -Path \"E:\\\\Urban_v2\\\\urban_frontend\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(Get-ChildItem -Path \"E:\\\\Urban_v2\\\\urban_frontend\" -Depth 0)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(npx eslint *)"
     ]
   }
 }
