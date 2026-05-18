@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
     proxy: {
       '/api': { target: bridgeUrl, changeOrigin: true },
       '/video_feed': { target: bridgeUrl, changeOrigin: true },
+      '/scenario': { target: bridgeUrl, changeOrigin: true },
       '/webrtc': { target: bridgeUrl, changeOrigin: true },
       '/socket.io': { target: bridgeUrl, changeOrigin: true, ws: true },
     },

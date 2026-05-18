@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Polygon, ArrowsClockwise, Gear, Lightning, Keyboard } from '@phosphor-icons/react';
+import { Polygon, ArrowsClockwise, Gear, Lightning, Keyboard, Flame } from '@phosphor-icons/react';
 import { useSystemStore } from '@/store/useSystemStore';
 import { StatusDot } from '@/components/primitives/StatusDot';
 import { NumberFlow } from '@/components/primitives/NumberFlow';
 import { Badge } from '@/components/primitives/Badge';
+import { Button } from '@/components/primitives/Button';
+import { ConfirmDialog } from '@/components/layout/ConfirmDialog';
+import { triggerFire, triggerReset } from '@/services/scenarioApi';
 
 function useNow() {
   const [now, setNow] = useState(new Date());
@@ -30,11 +33,41 @@ export function Header({ onShowShortcuts }: HeaderProps = {}) {
   const fps = useSystemStore((s) => s.metrics.fps);
   const now = useNow();
 
+  const [fireBusy, setFireBusy] = useState(false);
+  const [resetBusy, setResetBusy] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const onFire = async () => {
+    if (fireBusy) return;
+    setFireBusy(true);
+    try {
+      await triggerFire();
+    } catch {
+      // already logged via scenarioApi
+    } finally {
+      setFireBusy(false);
+    }
+  };
+
+  const onResetConfirmed = async () => {
+    if (resetBusy) return;
+    setResetBusy(true);
+    try {
+      await triggerReset();
+      setConfirmOpen(false);
+    } catch {
+      // already logged via scenarioApi
+    } finally {
+      setResetBusy(false);
+    }
+  };
+
   const stateLabel =
     connection === 'live' ? 'LIVE' : connection === 'reconnecting' ? 'CONNECTING' : 'OFFLINE';
 
   return (
-    <header className="h-16 shrink-0 px-6 flex items-center justify-between border-b border-hairline">
+    <>
+      <header className="h-16 shrink-0 px-6 flex items-center justify-between border-b border-hairline">
       <div className="flex items-center gap-4">
         <div className="flex items-center justify-center size-8 rounded bg-accent/10 text-accent">
           <Polygon size={18} weight="duotone" />
@@ -83,6 +116,31 @@ export function Header({ onShowShortcuts }: HeaderProps = {}) {
           </div>
         </div>
         <div className="h-5 w-px bg-hairline" />
+        <div className="flex items-center gap-2">
+          <Button
+            variant="danger"
+            size="sm"
+            disabled={fireBusy}
+            onClick={onFire}
+            aria-label="点火"
+            title="POST /scenario/fire"
+          >
+            <Flame size={11} weight="bold" />
+            FIRE
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            disabled={resetBusy}
+            onClick={() => setConfirmOpen(true)}
+            aria-label="重置场景"
+            title="POST /scenario/reset"
+          >
+            <ArrowsClockwise size={11} weight="bold" />
+            RESET
+          </Button>
+        </div>
+        <div className="h-5 w-px bg-hairline" />
         <div className="flex items-center gap-1">
           <button
             onClick={onShowShortcuts}
@@ -107,5 +165,19 @@ export function Header({ onShowShortcuts }: HeaderProps = {}) {
         </div>
       </div>
     </header>
+      <ConfirmDialog
+        open={confirmOpen}
+        title="重置场景"
+        description="将完全重新初始化场景:正在进行的指令会被取消,所有已生成的事件(如火点)会被销毁,run_id 递增。视频流不会中断。是否继续?"
+        confirmLabel="确认重置"
+        cancelLabel="取消"
+        variant="danger"
+        busy={resetBusy}
+        onConfirm={onResetConfirmed}
+        onCancel={() => {
+          if (!resetBusy) setConfirmOpen(false);
+        }}
+      />
+    </>
   );
 }
