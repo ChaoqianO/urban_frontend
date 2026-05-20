@@ -13,9 +13,8 @@ export function useBridge(probeMs = 1500) {
   useEffect(() => {
     let mockOn = false;
 
-    if (SOCKET_URL) {
-      connect({ url: SOCKET_URL });
-    }
+    // Empty VITE_SOCKET_URL → same-origin; dev proxy / prod nginx forwards /socket.io to the bridge.
+    connect({ url: SOCKET_URL || window.location.origin });
 
     const probe = setTimeout(() => {
       const s = getSocket();

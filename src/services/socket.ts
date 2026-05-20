@@ -33,6 +33,7 @@ export function connect(opts: ConnectOptions) {
   if (opts.passive) return socket;
 
   socket.on('connect', () => {
+    useSystemStore.getState().setMetrics({ cpu: 0, gpu: 0, mem: 0, net: 0, fps: 0 });
     useSystemStore.getState().setConnection('live');
     useSystemStore.getState().setSource('live');
     useSystemStore.getState().pushEvent({
@@ -68,7 +69,12 @@ export function connect(opts: ConnectOptions) {
     'system_metrics',
     (m: { cpu?: number; gpu?: number; mem?: number; net?: number; fps?: number }) => {
       const store = useSystemStore.getState();
-      store.setMetrics(m);
+      store.setMetrics({
+        cpu: m.cpu ?? 0,
+        gpu: m.gpu ?? 0,
+        mem: m.mem ?? 0,
+        net: m.net ?? 0,
+      });
       if (typeof m.fps === 'number') store.pushFps(m.fps);
     },
   );

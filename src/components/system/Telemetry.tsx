@@ -43,6 +43,7 @@ export function Telemetry() {
       title="系统遥测"
       collapsible
       state="live"
+      className="shrink-0"
       actions={
         <span className="font-mono text-2xs text-fg-2 tnum">
           <NumberFlow value={sys.fps} /> fps

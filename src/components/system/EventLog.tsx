@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSystemStore } from '@/store/useSystemStore';
 import { Panel } from '@/components/primitives/Panel';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,7 +23,11 @@ function fmt(ts: number) {
 }
 
 export function EventLog() {
-  const events = useSystemStore((s) => s.events);
+  const allEvents = useSystemStore((s) => s.events);
+  const events = useMemo(
+    () => allEvents.filter((e) => e.source === 'SCENARIO'),
+    [allEvents],
+  );
   const fade = useFadeMask<HTMLDivElement>();
   return (
     <Panel
@@ -30,16 +35,16 @@ export function EventLog() {
       title="事件日志"
       collapsible
       state="live"
+      className="flex-1 min-h-0"
       actions={
         <span className="font-mono text-2xs text-fg-3 tnum">{events.length}</span>
       }
     >
-      <div className="relative">
+      <div className="relative h-full">
       <div
         ref={fade.ref}
-        className="px-4 pt-1 pb-1 overflow-auto"
+        className="h-full px-4 pt-1 pb-1 overflow-auto"
         style={{
-          height: '110px',
           overscrollBehavior: 'contain',
         }}
       >
