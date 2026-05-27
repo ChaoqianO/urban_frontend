@@ -2,8 +2,24 @@ import { io, type Socket } from 'socket.io-client';
 import { useSystemStore } from '@/store/useSystemStore';
 import { useTelemetryStore } from '@/store/useTelemetryStore';
 import { useCommandStore } from '@/store/useCommandStore';
+import { useAgentActivityStore } from '@/store/useAgentActivityStore';
 
 let socket: Socket | null = null;
+let connectedAt = 0;
+let suppressReplayUntil = 0;
+
+const INITIAL_REPLAY_SUPPRESS_MS = 2500;
+
+function normalizeEventTimestamp(timestamp?: number | string) {
+  if (typeof timestamp === 'number') {
+    return timestamp < 1_000_000_000_000 ? timestamp * 1000 : timestamp;
+  }
+  if (typeof timestamp === 'string') {
+    const parsed = Date.parse(timestamp);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  return undefined;
+}
 
 export interface ConnectOptions {
   url: string;
@@ -33,6 +49,9 @@ export function connect(opts: ConnectOptions) {
   if (opts.passive) return socket;
 
   socket.on('connect', () => {
+    connectedAt = Date.now();
+    suppressReplayUntil = connectedAt + INITIAL_REPLAY_SUPPRESS_MS;
+    useAgentActivityStore.getState().clearNotifications();
     useSystemStore.getState().setMetrics({ cpu: 0, gpu: 0, mem: 0, net: 0, fps: 0 });
     useSystemStore.getState().setConnection('live');
     useSystemStore.getState().setSource('live');
@@ -81,12 +100,30 @@ export function connect(opts: ConnectOptions) {
 
   socket.on(
     'event_log',
-    (e: { severity?: 'info' | 'ok' | 'warn' | 'danger'; source?: string; message: string }) => {
-      useSystemStore.getState().pushEvent({
+    (e: {
+      severity?: 'info' | 'ok' | 'warn' | 'danger';
+      source?: string;
+      message: string;
+      timestamp?: number | string;
+    }) => {
+      const eventTimestamp = normalizeEventTimestamp(e.timestamp);
+      const isHistorical =
+        typeof eventTimestamp === 'number' &&
+        Number.isFinite(eventTimestamp) &&
+        eventTimestamp < connectedAt - 1000;
+      const event = {
         severity: e.severity ?? 'info',
         source: e.source ?? 'AGENT',
         message: e.message,
+        timestamp: eventTimestamp,
+        notify: Date.now() >= suppressReplayUntil && !isHistorical,
+      };
+      useSystemStore.getState().pushEvent({
+        severity: event.severity,
+        source: event.source,
+        message: event.message,
       });
+      useAgentActivityStore.getState().ingestEventLog(event);
     },
   );
 
@@ -99,6 +136,7 @@ export function connect(opts: ConnectOptions) {
 
   socket.on('agent_reject', (a: { id: string; reason: string; target?: string }) => {
     useCommandStore.getState().reject(a.id, a.reason, a.target);
+    useAgentActivityStore.getState().ingestReject(a);
   });
 
   return socket;
