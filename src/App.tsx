@@ -9,6 +9,7 @@ import { FleetStatus } from '@/components/system/FleetStatus';
 import { Telemetry } from '@/components/system/Telemetry';
 import { EventLog } from '@/components/system/EventLog';
 import { AgentInstructions } from '@/components/system/AgentInstructions';
+import { AgentNoticeOverlay } from '@/components/system/AgentNoticeOverlay';
 import { ErrorBoundary } from '@/components/system/ErrorBoundary';
 import { useBridge } from '@/hooks/useBridge';
 import { useFullscreen } from '@/hooks/useFullscreen';
@@ -93,6 +94,7 @@ export default function App() {
           </section>
         </main>
         <Footer />
+        <AgentNoticeOverlay />
         <ShortcutHint open={hintOpen} onClose={() => setHintOpen(false)} />
       </div>
     </ErrorBoundary>

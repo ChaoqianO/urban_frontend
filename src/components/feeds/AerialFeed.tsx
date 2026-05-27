@@ -2,6 +2,7 @@ import { Panel } from '@/components/primitives/Panel';
 import { Stat } from '@/components/primitives/Stat';
 import { Button } from '@/components/primitives/Button';
 import { useTelemetryStore } from '@/store/useTelemetryStore';
+import { useAgentActivityStore } from '@/store/useAgentActivityStore';
 import { VideoSurface } from './VideoSurface';
 import { CornersOut } from '@phosphor-icons/react';
 import { useFullscreen } from '@/hooks/useFullscreen';
@@ -10,6 +11,7 @@ const DEFAULT_URL = import.meta.env.VITE_UAV_FEED_URL ?? '/media/aerial.mp4';
 
 export function AerialFeed() {
   const uav = useTelemetryStore((s) => s.uav);
+  const fireAlert = useAgentActivityStore((s) => s.aerialFireAlertActive);
   const { toggle } = useFullscreen();
 
   return (
@@ -35,6 +37,16 @@ export function AerialFeed() {
     >
       <div className="relative flex-1 min-h-0">
         <VideoSurface variant="aerial" label={uav.id} defaultUrl={DEFAULT_URL} />
+        {fireAlert && (
+          <div
+            className="pointer-events-none absolute inset-0 z-20 aerial-fire-alert"
+            aria-hidden="true"
+          >
+            <div className="absolute left-3 top-3 rounded border border-danger/70 bg-surface-1/82 px-2 py-1 font-mono text-2xs uppercase tracking-[0.08em] text-danger">
+              FIRE ALERT
+            </div>
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-4 gap-3 px-4 py-3 border-t border-hairline">
         <Stat label="ALT" value={uav.altitude.toFixed(1)} unit="m" size="sm" />
