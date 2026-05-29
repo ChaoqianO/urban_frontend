@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
   server: {
     port: 5173,
     host: true,
+    allowedHosts: [
+      'carla.zxyangyu.cn'
+    ],
     proxy: {
       '/api': { target: bridgeUrl, changeOrigin: true },
       '/video_feed': { target: bridgeUrl, changeOrigin: true },
