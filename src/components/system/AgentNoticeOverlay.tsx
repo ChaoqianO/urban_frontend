@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import {
   Broadcast,
   CheckCircle,
@@ -13,7 +13,10 @@ import { cn } from '@/lib/cn';
 
 const AUTO_DISMISS_MS = 9000;
 
-const toneClass: Record<AgentNotification['severity'], { shell: string; icon: string; accent: string }> = {
+const toneClass: Record<
+  AgentNotification['severity'],
+  { shell: string; icon: string; accent: string }
+> = {
   info: {
     shell: 'border-fg-1/12 bg-surface-1 text-fg-1',
     icon: 'bg-fg-1/8 text-fg-2',
@@ -55,9 +58,16 @@ function NoticeIcon({ notice }: { notice: AgentNotification }) {
   return <Broadcast size={20} weight="fill" />;
 }
 
-function AgentNotice({ notice }: { notice: AgentNotification }) {
+const noticeDepth = [
+  { opacity: 1 },
+  { opacity: 0.78 },
+  { opacity: 0.56 },
+] as const;
+
+function AgentNotice({ notice, index }: { notice: AgentNotification; index: number }) {
   const dismiss = useAgentActivityStore((s) => s.dismissNotification);
   const tone = toneClass[notice.severity];
+  const depth = noticeDepth[index] ?? noticeDepth[noticeDepth.length - 1];
 
   useEffect(() => {
     const timeout = window.setTimeout(() => dismiss(notice.id), AUTO_DISMISS_MS);
@@ -67,10 +77,16 @@ function AgentNotice({ notice }: { notice: AgentNotification }) {
   return (
     <motion.div
       key={notice.id}
-      initial={{ opacity: 0, y: -18, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -10, scale: 0.98 }}
-      transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+      layout="position"
+      initial={{ opacity: 0, y: -14 }}
+      animate={{ opacity: depth.opacity, y: 0 }}
+      exit={{ opacity: 0, y: 14 }}
+      transition={{
+        opacity: { duration: 0.18, ease: 'easeOut' },
+        y: { duration: 0.28, ease: [0.32, 0.72, 0, 1] },
+        layout: { duration: 0.28, ease: [0.32, 0.72, 0, 1] },
+      }}
+      style={{ transformOrigin: 'top center' }}
       className={cn(
         'pointer-events-auto w-[min(760px,calc(100vw-32px))] overflow-hidden rounded-md border',
         'font-sans tnum shadow-panel-elevated',
@@ -106,13 +122,17 @@ function AgentNotice({ notice }: { notice: AgentNotification }) {
 }
 
 export function AgentNoticeOverlay() {
-  const latestNotice = useAgentActivityStore((s) => s.notifications[0]);
+  const notices = useAgentActivityStore((s) => s.notifications);
 
   return (
-    <div className="pointer-events-none fixed left-1/2 top-12 z-50 -translate-x-1/2">
-      <AnimatePresence mode="wait" initial={false}>
-        {latestNotice && <AgentNotice key={latestNotice.id} notice={latestNotice} />}
-      </AnimatePresence>
+    <div className="pointer-events-none fixed left-1/2 top-12 z-50 flex -translate-x-1/2 flex-col items-center gap-2">
+      <LayoutGroup>
+        <AnimatePresence initial={false}>
+          {notices.map((notice, index) => (
+            <AgentNotice key={notice.id} notice={notice} index={index} />
+          ))}
+        </AnimatePresence>
+      </LayoutGroup>
     </div>
   );
 }

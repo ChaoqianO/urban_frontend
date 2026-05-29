@@ -195,7 +195,7 @@ export function VideoSurface({
                       ? '/video_feed?camera=...'
                       : draftProto === 'webrtc'
                         ? '/webrtc/offer'
-                        : '/media/sample.mp4'
+                        : '/media/uav_patrol.mp4'
                   }
                   value={draftUrl}
                   onChange={(e) => setDraftUrl(e.target.value)}

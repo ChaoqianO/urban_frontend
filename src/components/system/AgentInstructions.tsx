@@ -107,7 +107,7 @@ export function AgentInstructions() {
         title: commandTitle(parsed),
       });
     }
-    return out;
+    return out.sort((a, b) => b.timestamp - a.timestamp);
   }, [events]);
 
   return (
@@ -133,51 +133,48 @@ export function AgentInstructions() {
             </div>
           ) : (
             <AnimatePresence initial={false}>
-              {rows
-                .slice()
-                .reverse()
-                .map((r) => (
-                  <motion.div
-                    key={r.id}
-                    layout
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.24 }}
-                    className="flex min-h-[34px] items-center gap-2 border-b border-fg-1/6 py-1 last:border-b-0"
+              {rows.map((r) => (
+                <motion.div
+                  key={r.id}
+                  layout
+                  initial={{ opacity: 0, x: -4 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.24 }}
+                  className="flex min-h-[34px] items-center gap-2 border-b border-fg-1/6 py-1 last:border-b-0"
+                >
+                  <span className="w-[56px] shrink-0 font-mono text-2xs text-fg-4 tnum">
+                    {fmt(r.timestamp)}
+                  </span>
+                  <span
+                    className={cn(
+                      'shrink-0 rounded border px-1.5 py-0.5 text-2xs font-medium',
+                      r.action === 'accept'
+                        ? 'border-ok/24 bg-ok/10 text-ok'
+                        : 'border-danger/24 bg-danger/10 text-danger',
+                    )}
                   >
-                    <span className="w-[56px] shrink-0 font-mono text-2xs text-fg-4 tnum">
-                      {fmt(r.timestamp)}
-                    </span>
-                    <span
-                      className={cn(
-                        'shrink-0 rounded border px-1.5 py-0.5 text-2xs font-medium',
-                        r.action === 'accept'
-                          ? 'border-ok/24 bg-ok/10 text-ok'
-                          : 'border-danger/24 bg-danger/10 text-danger',
-                      )}
-                    >
-                      {r.action === 'accept' ? '已下发' : '已拒绝'}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-xs font-medium text-fg-1">{r.title}</div>
-                      <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.04em] text-fg-4">
-                        <span className="shrink-0">{readableTarget(r.target)}</span>
-                        {r.kind ? (
-                          <>
-                            <span className="shrink-0 text-fg-4/70">/</span>
-                            <span className="truncate">{r.kind}</span>
-                          </>
-                        ) : null}
-                        {r.taskId ? (
-                          <>
-                            <span className="shrink-0 text-fg-4/70">/</span>
-                            <span className="truncate normal-case">{r.taskId}</span>
-                          </>
-                        ) : null}
-                      </div>
+                    {r.action === 'accept' ? '已下发' : '已拒绝'}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-xs font-medium text-fg-1">{r.title}</div>
+                    <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.04em] text-fg-4">
+                      <span className="shrink-0">{readableTarget(r.target)}</span>
+                      {r.kind ? (
+                        <>
+                          <span className="shrink-0 text-fg-4/70">/</span>
+                          <span className="truncate">{r.kind}</span>
+                        </>
+                      ) : null}
+                      {r.taskId ? (
+                        <>
+                          <span className="shrink-0 text-fg-4/70">/</span>
+                          <span className="truncate normal-case">{r.taskId}</span>
+                        </>
+                      ) : null}
                     </div>
-                  </motion.div>
-                ))}
+                  </div>
+                </motion.div>
+              ))}
             </AnimatePresence>
           )}
         </div>

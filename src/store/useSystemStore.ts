@@ -9,6 +9,8 @@ export interface LogEvent {
   message: string;
 }
 
+type LogEventInput = Omit<LogEvent, 'id' | 'timestamp'> & { timestamp?: number };
+
 interface SystemState {
   connection: ConnectionState;
   source: 'live' | 'mock';
@@ -18,7 +20,7 @@ interface SystemState {
   setSource: (s: 'live' | 'mock') => void;
   setMetrics: (patch: Partial<SystemMetrics>) => void;
   pushFps: (fps: number) => void;
-  pushEvent: (e: Omit<LogEvent, 'id' | 'timestamp'>) => void;
+  pushEvent: (e: LogEventInput) => void;
 }
 
 const seedFps = Array.from({ length: 60 }, (_, i) =>
@@ -106,10 +108,16 @@ export const useSystemStore = create<SystemState>((set) => ({
       },
     })),
   pushEvent: (e) =>
-    set((s) => ({
-      events: [
-        ...s.events,
-        { ...e, id: `e${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, timestamp: Date.now() },
-      ].slice(-200),
-    })),
+    set((s) => {
+      const incoming: LogEvent = {
+        ...e,
+        id: `e${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        timestamp: e.timestamp ?? Date.now(),
+      };
+      // Keep events sorted ascending by timestamp so slice(-200) actually
+      // retains the newest 200 even when replayed events backfill older
+      // timestamps. UI consumers re-sort descending for display.
+      const merged = [...s.events, incoming].sort((a, b) => a.timestamp - b.timestamp);
+      return { events: merged.slice(-200) };
+    }),
 }));

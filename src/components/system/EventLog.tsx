@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSystemStore } from '@/store/useSystemStore';
-import {
-  formatAgentEventLogMessage,
-  type AgentCommandStatus,
-} from '@/store/useAgentActivityStore';
+import { formatAgentEventLogMessage, type AgentCommandStatus } from '@/store/useAgentActivityStore';
 import { Panel } from '@/components/primitives/Panel';
 import { cn } from '@/lib/cn';
 import { useFadeMask } from '@/hooks/useFadeMask';
@@ -37,7 +34,8 @@ function fmt(ts: number) {
 export function EventLog() {
   const allEvents = useSystemStore((s) => s.events);
   const events = useMemo(
-    () => allEvents.filter((e) => e.source === 'SCENARIO'),
+    () =>
+      allEvents.filter((e) => e.source === 'SCENARIO').sort((a, b) => b.timestamp - a.timestamp),
     [allEvents],
   );
   const fade = useFadeMask<HTMLDivElement>();
@@ -60,63 +58,58 @@ export function EventLog() {
           }}
         >
           <AnimatePresence initial={false}>
-            {events
-              .slice()
-              .reverse()
-              .map((e) => {
-                const formatted = formatAgentEventLogMessage(e.source, e.message);
+            {events.map((e) => {
+              const formatted = formatAgentEventLogMessage(e.source, e.message);
 
-                return (
-                  <motion.div
-                    key={e.id}
-                    layout
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.24 }}
-                    className="flex min-h-[34px] items-center gap-2 border-b border-fg-1/6 py-1 last:border-b-0"
-                  >
-                    <span className="w-[56px] shrink-0 font-mono text-2xs text-fg-4 tnum">
-                      {fmt(e.timestamp)}
-                    </span>
-                    {formatted ? (
-                      <>
-                        <span
-                          className={cn(
-                            'shrink-0 rounded border px-1.5 py-0.5 text-2xs font-medium',
-                            statusTone[formatted.status],
-                          )}
-                        >
-                          {formatted.statusLabel}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-xs font-medium text-fg-1">
-                            {formatted.displayText}
-                          </div>
-                          <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.04em] text-fg-4">
-                            <span className="shrink-0">{formatted.targetLabel}</span>
-                            <span className="shrink-0 text-fg-4/70">/</span>
-                            <span className="truncate">{formatted.kind}</span>
-                          </div>
+              return (
+                <motion.div
+                  key={e.id}
+                  layout
+                  initial={{ opacity: 0, x: -4 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.24 }}
+                  className="flex min-h-[34px] items-center gap-2 border-b border-fg-1/6 py-1 last:border-b-0"
+                >
+                  <span className="w-[56px] shrink-0 font-mono text-2xs text-fg-4 tnum">
+                    {fmt(e.timestamp)}
+                  </span>
+                  {formatted ? (
+                    <>
+                      <span
+                        className={cn(
+                          'shrink-0 rounded border px-1.5 py-0.5 text-2xs font-medium',
+                          statusTone[formatted.status],
+                        )}
+                      >
+                        {formatted.statusLabel}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-xs font-medium text-fg-1">
+                          {formatted.displayText}
                         </div>
-                      </>
-                    ) : (
-                      <>
-                        <span
-                          className={cn(
-                            'w-[60px] shrink-0 font-mono text-2xs uppercase tracking-[0.06em]',
-                            tone[e.severity],
-                          )}
-                        >
-                          {e.source}
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-xs text-fg-2">
-                          {e.message}
-                        </span>
-                      </>
-                    )}
-                  </motion.div>
-                );
-              })}
+                        <div className="mt-0.5 flex min-w-0 items-center gap-1.5 font-mono text-2xs uppercase tracking-[0.04em] text-fg-4">
+                          <span className="shrink-0">{formatted.targetLabel}</span>
+                          <span className="shrink-0 text-fg-4/70">/</span>
+                          <span className="truncate">{formatted.kind}</span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <span
+                        className={cn(
+                          'w-[60px] shrink-0 font-mono text-2xs uppercase tracking-[0.06em]',
+                          tone[e.severity],
+                        )}
+                      >
+                        {e.source}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-xs text-fg-2">{e.message}</span>
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
         <ScrollFade top={fade.top} bottom={fade.bottom} />

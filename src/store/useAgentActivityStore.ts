@@ -48,16 +48,24 @@ interface AgentActivityState {
   ingestEventLog: (event: AgentEventInput) => void;
   ingestReject: (payload: { id: string; target?: string; reason: string }) => void;
   dismissNotification: (id: string) => void;
-  clearNotifications: () => void;
+  resetForReconnect: () => void;
 }
 
 const COMMAND_SOURCES = new Set(['SCENARIO', 'AGENT']);
-const COMPLETE_VALUES = new Set(['completed', 'complete', 'success', 'succeeded', 'done', 'finished']);
+const COMPLETE_VALUES = new Set([
+  'completed',
+  'complete',
+  'success',
+  'succeeded',
+  'done',
+  'finished',
+]);
 const REJECT_VALUES = new Set(['rejected', 'reject', 'failed', 'failure', 'error']);
 const RUNNING_VALUES = new Set(['running', 'active', 'executing', 'in_progress', 'progress']);
 const ACCEPT_VALUES = new Set(['accepted', 'accept', 'queued', 'started', 'start']);
 const FIELD_STATUS_KEYS = new Set(['status', 'state', 'result', 'phase']);
 const IGNORED_KINDS = new Set(['UAV_HOLD']);
+const MAX_NOTIFICATIONS = 3;
 
 function normalizeStatus(value?: string): AgentCommandStatus {
   const normalized = value?.trim().toLowerCase();
@@ -177,6 +185,12 @@ function shouldNotify(status: AgentCommandStatus, kind: string) {
   );
 }
 
+function pushNotification(notifications: AgentNotification[], notification: AgentNotification) {
+  return [...notifications, notification]
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, MAX_NOTIFICATIONS);
+}
+
 export function agentStatusLabel(status: AgentCommandStatus) {
   if (status === 'accepted') return '已接收';
   if (status === 'running') return '执行中';
@@ -214,43 +228,51 @@ export const useAgentActivityStore = create<AgentActivityState>((set, get) => ({
     if (IGNORED_KINDS.has(parsed.kind)) return;
 
     const timestamp = event.timestamp ?? Date.now();
-    const previous = get().activitiesByTarget[parsed.target];
-    if (previous && previous.timestamp > timestamp) return;
-
     const id = `agent-${timestamp}-${Math.random().toString(36).slice(2, 6)}`;
     const displayText = toReadableMessage(parsed.target, parsed.kind, parsed.status);
-    const activity: AgentActivity = {
-      id,
-      target: parsed.target,
-      kind: parsed.kind,
-      status: parsed.status,
-      taskId: parsed.taskId,
-      timestamp,
-      summary: parsed.summary,
-      displayText,
-      source,
-    };
+    const shouldEmitNotification =
+      event.notify !== false && shouldNotify(parsed.status, parsed.kind);
 
-    const isFireDetected =
-      parsed.status === 'completed' && parsed.kind === 'UAV_GOTO' && parsed.target.startsWith('UAV-');
-    const isFireCleared =
-      parsed.status === 'completed' &&
-      parsed.kind === 'UGV_EXTINGUISH' &&
-      parsed.target.startsWith('UGV-');
+    set((state) => {
+      const previous = state.activitiesByTarget[parsed.target];
+      // Activities track latest-known per target; an older event must not
+      // overwrite a newer one. Notifications, however, are independent —
+      // a delayed "completed"/"rejected" is still worth surfacing.
+      const isStale = !!previous && previous.timestamp > timestamp;
+      const next: Partial<AgentActivityState> = {};
 
-    const nextState: Partial<AgentActivityState> = {
-      activitiesByTarget: {
-        ...get().activitiesByTarget,
-        [parsed.target]: activity,
-      },
-    };
+      if (!isStale) {
+        const activity: AgentActivity = {
+          id,
+          target: parsed.target,
+          kind: parsed.kind,
+          status: parsed.status,
+          taskId: parsed.taskId,
+          timestamp,
+          summary: parsed.summary,
+          displayText,
+          source,
+        };
+        next.activitiesByTarget = {
+          ...state.activitiesByTarget,
+          [parsed.target]: activity,
+        };
 
-    if (isFireDetected) nextState.aerialFireAlertActive = true;
-    if (isFireCleared) nextState.aerialFireAlertActive = false;
+        const isFireDetected =
+          parsed.status === 'completed' &&
+          parsed.kind === 'UAV_GOTO' &&
+          parsed.target.startsWith('UAV-');
+        const isFireCleared =
+          parsed.status === 'completed' &&
+          parsed.kind === 'UGV_EXTINGUISH' &&
+          parsed.target.startsWith('UGV-');
 
-    if (event.notify !== false && shouldNotify(parsed.status, parsed.kind)) {
-      nextState.notifications = [
-        {
+        if (isFireDetected) next.aerialFireAlertActive = true;
+        if (isFireCleared) next.aerialFireAlertActive = false;
+      }
+
+      if (shouldEmitNotification) {
+        next.notifications = pushNotification(state.notifications, {
           id,
           timestamp,
           severity: eventSeverity(parsed.status, parsed.kind),
@@ -258,11 +280,11 @@ export const useAgentActivityStore = create<AgentActivityState>((set, get) => ({
           kind: parsed.kind,
           status: parsed.status,
           message: displayText,
-        },
-      ];
-    }
+        });
+      }
 
-    set(nextState);
+      return next;
+    });
   },
 
   ingestReject: ({ id, target, reason }) => {
@@ -297,7 +319,7 @@ export const useAgentActivityStore = create<AgentActivityState>((set, get) => ({
         ...state.activitiesByTarget,
         [target]: activity,
       },
-      notifications: [notification],
+      notifications: pushNotification(state.notifications, notification),
     }));
   },
 
@@ -306,5 +328,5 @@ export const useAgentActivityStore = create<AgentActivityState>((set, get) => ({
       notifications: state.notifications.filter((notification) => notification.id !== id),
     })),
 
-  clearNotifications: () => set({ notifications: [] }),
+  resetForReconnect: () => set({ notifications: [], aerialFireAlertActive: false }),
 }));
