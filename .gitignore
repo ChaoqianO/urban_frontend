@@ -13,3 +13,5 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 coverage
+.claude/
+media/
